@@ -1,16 +1,21 @@
 from __future__ import annotations
 
+# ruff: noqa: E402, I001
+
 import asyncio
 import json
 import sys
 import warnings
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 warnings.filterwarnings(
     "ignore",
-    message=r"urllib3 \(.+\) or chardet \(.+\)/charset_normalizer \(.+\) doesn't match a supported version!",
+    message=(
+        r"urllib3 \(.+\) or chardet \(.+\)/charset_normalizer \(.+\) "
+        r"doesn't match a supported version!"
+    ),
 )
 
 from crawl4ai_actor.crawler import crawl_urls
@@ -150,7 +155,7 @@ async def main() -> None:
         sys.stderr.reconfigure(encoding="utf-8")
 
     report = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "scenarios": [],
     }
 

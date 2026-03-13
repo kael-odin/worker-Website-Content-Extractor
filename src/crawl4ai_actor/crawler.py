@@ -7,9 +7,44 @@ import time
 from collections.abc import AsyncIterator
 from datetime import UTC, datetime
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse
 
 from crawl4ai import AsyncWebCrawler, BrowserConfig, CacheMode, CrawlerRunConfig
+
+
+def _normalize_url(url: str | None) -> str | None:
+    if not url:
+        return None
+    url = url.strip()
+    if not url:
+        return None
+    parsed = urlparse(url)
+    if parsed.scheme and parsed.scheme not in {"http", "https"}:
+        return None
+    if not parsed.scheme or not parsed.netloc:
+        return None
+    normalized = parsed._replace(
+        scheme=parsed.scheme.lower(),
+        netloc=parsed.netloc.lower(),
+        fragment="",
+    )
+    return urlunparse(normalized)
+
+
+def _compile_patterns(patterns: list[str], label: str) -> list[re.Pattern[str]]:
+    compiled: list[re.Pattern[str]] = []
+    invalid: list[str] = []
+    for pattern in patterns:
+        if not pattern:
+            continue
+        try:
+            compiled.append(re.compile(pattern))
+        except re.error:
+            invalid.append(pattern)
+    if invalid:
+        joined = ", ".join(repr(p) for p in invalid)
+        raise ValueError(f"Invalid {label} regex pattern(s): {joined}")
+    return compiled
 
 
 def _extract_content(result: Any, extract_mode: str) -> str | None:
@@ -185,15 +220,22 @@ async def crawl_urls(
         page_timeout=int(request_timeout_secs * 1000),
     )
 
-    include_regexes = [re.compile(pattern) for pattern in include_patterns if pattern]
-    exclude_regexes = [re.compile(pattern) for pattern in exclude_patterns if pattern]
-    base_domains = {urlparse(url).netloc for url in start_urls if urlparse(url).netloc}
+    include_regexes = _compile_patterns(include_patterns, "includePatterns")
+    exclude_regexes = _compile_patterns(exclude_patterns, "excludePatterns")
+
+    normalized_start_urls = []
+    for url in start_urls:
+        normalized = _normalize_url(url)
+        if normalized:
+            normalized_start_urls.append(normalized)
+
+    base_domains = {urlparse(url).netloc for url in normalized_start_urls if urlparse(url).netloc}
 
     async with AsyncWebCrawler(config=browser_config) as crawler:
         seen: set[str] = set()
         frontier: list[tuple[str, int]] = []
         attempts: dict[str, int] = {}
-        for url in start_urls:
+        for url in normalized_start_urls:
             if url not in seen:
                 seen.add(url)
                 attempts[url] = 0
@@ -235,7 +277,7 @@ async def crawl_urls(
 
             async for result in _iter_results(crawler, batch, run_config):
                 processed_requests += 1
-                url_value = getattr(result, "url", None)
+                url_value = _normalize_url(getattr(result, "url", None))
                 attempt = attempts.get(url_value, 0) if url_value else 0
                 success = bool(getattr(result, "success", False))
                 status_code = getattr(result, "status_code", None)
@@ -291,6 +333,7 @@ async def crawl_urls(
                             href = link
                         elif isinstance(link, dict):
                             href = link.get("href")
+                        href = _normalize_url(href)
                         if not href or href in seen:
                             continue
                         if same_domain_only and base_domains:

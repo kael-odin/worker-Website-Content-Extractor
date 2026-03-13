@@ -1,11 +1,16 @@
 from __future__ import annotations
 
+# ruff: noqa: E402, I001
+
 import asyncio
 import warnings
 
 warnings.filterwarnings(
     "ignore",
-    message=r"urllib3 \(.+\) or chardet \(.+\)/charset_normalizer \(.+\) doesn't match a supported version!",
+    message=(
+        r"urllib3 \(.+\) or chardet \(.+\)/charset_normalizer \(.+\) "
+        r"doesn't match a supported version!"
+    ),
 )
 
 from apify import Actor
