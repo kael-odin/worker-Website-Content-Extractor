@@ -1,4 +1,4 @@
-# Crawl4AI Actor
+# Crawl4AI Web Crawler Actor
 
 Apify Actor wrapper around the open-source crawl4ai project.
 

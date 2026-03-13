@@ -1,8 +1,8 @@
 {
   "actorSpecification": 1,
-  "name": "crawl4ai-actor",
-  "title": "Crawl4AI Actor",
-  "description": "Apify Actor wrapper for crawl4ai.",
+  "name": "crawl4ai-web-crawler",
+  "title": "Crawl4AI Web Crawler",
+  "description": "Crawl websites and export markdown, HTML, or text using crawl4ai.",
   "version": "0.1",
   "meta": {
     "templateId": "python"
