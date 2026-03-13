@@ -1,16 +1,26 @@
 from __future__ import annotations
 
 import asyncio
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    message=r"urllib3 \(.+\) or chardet \(.+\)/charset_normalizer \(.+\) doesn't match a supported version!",
+)
 
 from apify import Actor
 
 from crawl4ai_actor.config import ActorInput
 from crawl4ai_actor.crawler import crawl_urls
 
-
 async def _run() -> None:
     async with Actor:
         raw_input = await Actor.get_input() or {}
+        if not raw_input or not raw_input.get("startUrls"):
+            Actor.log.error(
+                "Missing required input: startUrls. Example: {'startUrls': ['https://example.com']}"
+            )
+            return
         actor_input = ActorInput(**raw_input)
 
         proxy_url: str | None = None

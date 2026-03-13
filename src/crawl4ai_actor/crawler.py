@@ -49,25 +49,52 @@ def _clean_markdown(content: str) -> str:
     lines = [line.strip() for line in content.splitlines()]
     cleaned: list[str] = []
     last_line = None
+    in_leading_nav = True
+    link_pattern = re.compile(r"!\[.*?\]\(.*?\)|\[(.*?)\]\(.*?\)")
+
     for line in lines:
         if not line:
             if cleaned and cleaned[-1] != "":
                 cleaned.append("")
             continue
+
         lower = line.lower()
         if "skip to content" in lower:
             continue
         if lower in {"back", "log in", "login", "sign up", "get started"}:
             continue
+        if "![" in line:
+            continue
+
+        link_count = line.count("](")
+        stripped = link_pattern.sub(r"\1", line)
+        stripped = stripped.replace("!", "").strip()
+        text_len = len(stripped)
+        link_ratio = link_count / max(len(line.split()), 1)
+
+        if in_leading_nav:
+            if line.startswith("#") or text_len > 60:
+                in_leading_nav = False
+            else:
+                if link_count > 0 or line.startswith(("* [", "- [", "+ [")) or text_len < 20:
+                    continue
+
         if line.startswith(("* [", "- [", "+ [")) and len(line) < 200:
             continue
-        link_density = (line.count("](") * 4) / max(len(line), 1)
-        if link_density > 0.4 and len(line) < 200:
+        if line.startswith("[") and link_count >= 1 and text_len < 80:
+            continue
+        if link_count >= 2 and text_len < 40:
+            continue
+        if link_ratio > 0.6 and text_len < 80:
+            continue
+        if (line.count("](") * 4) / max(len(line), 1) > 0.4 and len(line) < 200:
             continue
         if last_line == line:
             continue
+
         cleaned.append(line)
         last_line = line
+
     return "\n".join(cleaned).strip()
 
 
