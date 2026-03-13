@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import re
+import time
 from collections.abc import AsyncIterator
 from datetime import UTC, datetime
 from typing import Any
@@ -69,6 +71,9 @@ async def crawl_urls(
     same_domain_only: bool,
     include_patterns: list[str],
     exclude_patterns: list[str],
+    max_retries: int,
+    retry_backoff_secs: int,
+    max_requests_per_minute: int,
 ) -> AsyncIterator[dict]:
     browser_config = BrowserConfig(
         headless=headless,
@@ -88,13 +93,18 @@ async def crawl_urls(
     async with AsyncWebCrawler(config=browser_config) as crawler:
         seen: set[str] = set()
         frontier: list[tuple[str, int]] = []
+        attempts: dict[str, int] = {}
         for url in start_urls:
             if url not in seen:
                 seen.add(url)
+                attempts[url] = 0
                 frontier.append((url, 0))
 
-        processed = 0
-        while frontier and processed < max_pages:
+        processed_requests = 0
+        window_start = time.monotonic()
+        window_count = 0
+
+        while frontier and processed_requests < max_pages:
             current_depth = frontier[0][1]
             if current_depth > max_depth:
                 break
@@ -102,7 +112,21 @@ async def crawl_urls(
             batch: list[str] = []
             next_frontier: list[tuple[str, int]] = []
 
-            remaining = max_pages - processed
+            remaining = max_pages - processed_requests
+            if max_requests_per_minute > 0:
+                elapsed = time.monotonic() - window_start
+                if elapsed >= 60:
+                    window_start = time.monotonic()
+                    window_count = 0
+                remaining_in_window = max_requests_per_minute - window_count
+                if remaining_in_window <= 0:
+                    sleep_for = max(0, 60 - elapsed)
+                    if sleep_for:
+                        await asyncio.sleep(sleep_for)
+                    window_start = time.monotonic()
+                    window_count = 0
+                    remaining_in_window = max_requests_per_minute
+                remaining = min(remaining, remaining_in_window)
             while frontier and frontier[0][1] == current_depth and len(batch) < remaining:
                 url, depth = frontier.pop(0)
                 if depth != current_depth:
@@ -111,14 +135,26 @@ async def crawl_urls(
                 batch.append(url)
 
             async for result in _iter_results(crawler, batch, run_config):
-                processed += 1
+                processed_requests += 1
+                url_value = getattr(result, "url", None)
+                attempt = attempts.get(url_value, 0) if url_value else 0
+                success = bool(getattr(result, "success", False))
                 content = _extract_content(result, extract_mode)
                 meta = _extract_metadata(result)
                 links = getattr(result, "links", {}) or {}
                 internal_links = links.get("internal", []) if isinstance(links, dict) else []
                 external_links = links.get("external", []) if isinstance(links, dict) else []
+                will_retry = False
+                if not success and url_value and attempt < max_retries:
+                    attempts[url_value] = attempt + 1
+                    backoff = min(retry_backoff_secs * (2**attempt), 60)
+                    if backoff > 0:
+                        await asyncio.sleep(backoff)
+                    frontier.append((url_value, current_depth))
+                    will_retry = True
+
                 yield {
-                    "url": getattr(result, "url", None),
+                    "url": url_value,
                     "success": getattr(result, "success", None),
                     "status_code": getattr(result, "status_code", None),
                     "error_message": getattr(result, "error_message", None),
@@ -130,12 +166,14 @@ async def crawl_urls(
                     "links_internal_count": len(internal_links),
                     "links_external_count": len(external_links),
                     "extracted_at": datetime.now(UTC).isoformat(),
+                    "retry_attempt": attempt,
+                    "will_retry": will_retry,
                 }
 
-                if processed >= max_pages:
+                if processed_requests >= max_pages:
                     break
 
-                if current_depth < max_depth and getattr(result, "success", False):
+                if current_depth < max_depth and success:
                     for link in links.get("internal", []):
                         href = None
                         if isinstance(link, str):
@@ -159,3 +197,6 @@ async def crawl_urls(
 
             if next_frontier:
                 frontier.extend(next_frontier)
+
+            if max_requests_per_minute > 0:
+                window_count += len(batch)

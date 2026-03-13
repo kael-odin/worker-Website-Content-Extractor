@@ -16,6 +16,9 @@ def test_input_aliases() -> None:
         "sameDomainOnly": False,
         "includePatterns": ["example"],
         "excludePatterns": ["ignore"],
+        "maxRetries": 1,
+        "retryBackoffSecs": 5,
+        "maxRequestsPerMinute": 120,
     }
     parsed = ActorInput(**payload)
 
@@ -32,3 +35,6 @@ def test_input_aliases() -> None:
     assert parsed.same_domain_only is False
     assert parsed.include_patterns == ["example"]
     assert parsed.exclude_patterns == ["ignore"]
+    assert parsed.max_retries == 1
+    assert parsed.retry_backoff_secs == 5
+    assert parsed.max_requests_per_minute == 120

@@ -19,3 +19,6 @@ class ActorInput(BaseModel):
     same_domain_only: bool = Field(default=True, alias="sameDomainOnly")
     include_patterns: list[str] = Field(default_factory=list, alias="includePatterns")
     exclude_patterns: list[str] = Field(default_factory=list, alias="excludePatterns")
+    max_retries: int = Field(default=2, alias="maxRetries", ge=0, le=10)
+    retry_backoff_secs: int = Field(default=2, alias="retryBackoffSecs", ge=0, le=120)
+    max_requests_per_minute: int = Field(default=0, alias="maxRequestsPerMinute", ge=0, le=6000)

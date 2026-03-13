@@ -110,6 +110,30 @@
         "type": "string"
       },
       "editor": "stringList"
+    },
+    "maxRetries": {
+      "title": "Max Retries",
+      "type": "integer",
+      "description": "Retry failed pages up to this count.",
+      "default": 2,
+      "minimum": 0,
+      "maximum": 10
+    },
+    "retryBackoffSecs": {
+      "title": "Retry Backoff (seconds)",
+      "type": "integer",
+      "description": "Base backoff in seconds, doubled each retry.",
+      "default": 2,
+      "minimum": 0,
+      "maximum": 120
+    },
+    "maxRequestsPerMinute": {
+      "title": "Max Requests Per Minute",
+      "type": "integer",
+      "description": "Global rate limit. Set 0 for unlimited.",
+      "default": 0,
+      "minimum": 0,
+      "maximum": 6000
     }
   },
   "required": [

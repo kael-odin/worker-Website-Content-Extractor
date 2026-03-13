@@ -30,6 +30,9 @@ async def _run() -> None:
             same_domain_only=actor_input.same_domain_only,
             include_patterns=actor_input.include_patterns,
             exclude_patterns=actor_input.exclude_patterns,
+            max_retries=actor_input.max_retries,
+            retry_backoff_secs=actor_input.retry_backoff_secs,
+            max_requests_per_minute=actor_input.max_requests_per_minute,
         ):
             await Actor.push_data(item)
             processed += 1

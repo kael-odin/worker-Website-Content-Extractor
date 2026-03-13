@@ -33,7 +33,10 @@ python -m crawl4ai_actor.main
   "maxResults": 1000,
   "sameDomainOnly": true,
   "includePatterns": [],
-  "excludePatterns": []
+  "excludePatterns": [],
+  "maxRetries": 2,
+  "retryBackoffSecs": 2,
+  "maxRequestsPerMinute": 0
 }
 ```
 
@@ -51,3 +54,5 @@ python -m crawl4ai_actor.main
 - `links_internal_count`
 - `links_external_count`
 - `extracted_at`
+- `retry_attempt`
+- `will_retry`
