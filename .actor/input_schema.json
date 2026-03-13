@@ -6,7 +6,7 @@
     "startUrls": {
       "title": "Start URLs",
       "type": "array",
-      "description": "List of URLs to crawl.",
+      "description": "Starting URLs to visit.",
       "items": {
         "type": "string"
       },
@@ -18,7 +18,7 @@
     "maxPages": {
       "title": "Max Pages",
       "type": "integer",
-      "description": "Maximum number of pages to process.",
+      "description": "Maximum pages to process in total.",
       "default": 50,
       "minimum": 1,
       "maximum": 10000
@@ -26,7 +26,7 @@
     "maxDepth": {
       "title": "Max Depth",
       "type": "integer",
-      "description": "Maximum crawl depth from each start URL.",
+      "description": "Maximum link depth from each start URL.",
       "default": 2,
       "minimum": 0,
       "maximum": 10
@@ -50,7 +50,7 @@
     "headless": {
       "title": "Headless",
       "type": "boolean",
-      "description": "Run browser in headless mode.",
+      "description": "Run browser headless.",
       "default": true
     },
     "useProxy": {
@@ -71,7 +71,7 @@
     "extractMode": {
       "title": "Extract Mode",
       "type": "string",
-      "description": "Extraction strategy.",
+      "description": "Output format.",
       "default": "markdown",
       "enum": [
         "markdown",
@@ -82,7 +82,7 @@
     "maxResults": {
       "title": "Max Results",
       "type": "integer",
-      "description": "Cap the number of output items.",
+      "description": "Maximum output items to push.",
       "default": 1000,
       "minimum": 1,
       "maximum": 200000
@@ -90,7 +90,7 @@
     "sameDomainOnly": {
       "title": "Same Domain Only",
       "type": "boolean",
-      "description": "Only follow links within the start URL domains.",
+      "description": "Only follow links within start URL domains.",
       "default": true
     },
     "includePatterns": {

@@ -1,8 +1,8 @@
 {
   "actorSpecification": 1,
-  "name": "crawl4ai-web-crawler",
-  "title": "Crawl4AI Web Crawler",
-  "description": "Crawl websites and export markdown, HTML, or text using crawl4ai.",
+  "name": "website-content-extractor",
+  "title": "Website Content Extractor",
+  "description": "Extract clean page content, metadata, and link stats into a structured dataset.",
   "version": "0.1",
   "meta": {
     "templateId": "python"

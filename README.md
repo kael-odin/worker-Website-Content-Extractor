@@ -1,8 +1,8 @@
-# Crawl4AI Web Crawler Actor
+# Website Content Extractor Actor
 
-Apify Actor wrapper around the open-source crawl4ai project.
+Extract clean page content, metadata, and link stats from websites into a structured dataset. Built for quick content analysis, site audits, and monitoring tasks.
 
-## Local dev
+## Quick start
 
 ```bash
 python -m venv .venv
@@ -13,16 +13,11 @@ crawl4ai-setup
 python -m crawl4ai_actor.main
 ```
 
-## Notes
+## How it works
 
-- The actor expects input via Apify's input schema.
-- Outputs are stored in the default dataset.
-
-## UX smoke test
-
-```bash
-.venv/Scripts/python scripts/ux_smoke.py
-```
+1. Provide one or more start URLs.
+2. The actor crawls within your depth and rate limits.
+3. Results are written to the default dataset, with content and metadata ready to use.
 
 ## Input example
 
@@ -48,20 +43,51 @@ python -m crawl4ai_actor.main
 }
 ```
 
-## Output fields
+## Input reference
 
-- `url`
-- `success`
-- `status_code`
-- `error_message`
-- `error_type`
-- `content`
-- `title`
-- `meta_description`
-- `content_length`
-- `content_hash`
-- `links_internal_count`
-- `links_external_count`
-- `extracted_at`
-- `retry_attempt`
-- `will_retry`
+| Field | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `startUrls` | array | required | Starting URLs to visit. |
+| `maxPages` | integer | 50 | Maximum pages to process. |
+| `maxDepth` | integer | 2 | Maximum link depth from each start URL. |
+| `concurrency` | integer | 5 | Number of concurrent tasks. |
+| `requestTimeoutSecs` | integer | 60 | Timeout per page request. |
+| `headless` | boolean | true | Run browser headless. |
+| `useProxy` | boolean | false | Enable Apify proxy. |
+| `proxyGroups` | array | null | Proxy groups to use when proxy is enabled. |
+| `extractMode` | string | markdown | Output format: markdown, html, or text. |
+| `maxResults` | integer | 1000 | Maximum output items to push. |
+| `sameDomainOnly` | boolean | true | Only follow links within start URL domains. |
+| `includePatterns` | array | [] | Regex patterns to include URLs. |
+| `excludePatterns` | array | [] | Regex patterns to exclude URLs. |
+| `maxRetries` | integer | 2 | Retry failed pages. |
+| `retryBackoffSecs` | integer | 2 | Base retry backoff in seconds. |
+| `maxRequestsPerMinute` | integer | 0 | Global rate limit (0 = unlimited). |
+| `enableStealth` | boolean | false | Enable stealth mode for tougher sites. |
+| `userAgent` | string | null | Override the user agent string. |
+
+## Output schema
+
+Each dataset item includes:
+
+- `url` (string)
+- `success` (boolean)
+- `status_code` (integer or null)
+- `error_message` (string or null)
+- `error_type` (string or null)
+- `content` (string or null)
+- `title` (string or null)
+- `meta_description` (string or null)
+- `content_length` (integer)
+- `content_hash` (string or null)
+- `links_internal_count` (integer)
+- `links_external_count` (integer)
+- `extracted_at` (ISO timestamp)
+- `retry_attempt` (integer)
+- `will_retry` (boolean)
+
+## UX smoke test
+
+```bash
+.venv/Scripts/python scripts/ux_smoke.py
+```
