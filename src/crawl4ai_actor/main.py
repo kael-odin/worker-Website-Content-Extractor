@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Optional
 
 from apify import Actor
 
@@ -14,7 +13,7 @@ async def _run() -> None:
         raw_input = await Actor.get_input() or {}
         actor_input = ActorInput(**raw_input)
 
-        proxy_url: Optional[str] = None
+        proxy_url: str | None = None
         if actor_input.use_proxy:
             proxy_url = await _maybe_get_proxy_url(actor_input.proxy_groups)
 
@@ -35,7 +34,7 @@ async def _run() -> None:
                 break
 
 
-async def _maybe_get_proxy_url(proxy_groups: Optional[list[str]]) -> Optional[str]:
+async def _maybe_get_proxy_url(proxy_groups: list[str] | None) -> str | None:
     create_proxy = getattr(Actor, "create_proxy_configuration", None)
     if create_proxy is None:
         Actor.log.warning("Apify proxy requested, but SDK proxy helper is unavailable.")

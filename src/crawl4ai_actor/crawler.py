@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, AsyncIterator, Iterable, List, Optional, Set, Tuple
+from collections.abc import AsyncIterator
+from typing import Any
 
 from crawl4ai import AsyncWebCrawler, BrowserConfig, CacheMode, CrawlerRunConfig
 
 
-def _extract_content(result: Any, extract_mode: str) -> Optional[str]:
+def _extract_content(result: Any, extract_mode: str) -> str | None:
     if extract_mode == "html":
         return getattr(result, "cleaned_html", None) or getattr(result, "html", None)
 
@@ -24,7 +25,7 @@ def _extract_content(result: Any, extract_mode: str) -> Optional[str]:
 
 async def _iter_results(
     crawler: AsyncWebCrawler,
-    urls: List[str],
+    urls: list[str],
     run_config: CrawlerRunConfig,
 ) -> AsyncIterator[Any]:
     stream = await crawler.arun_many(urls, config=run_config)
@@ -37,13 +38,13 @@ async def _iter_results(
 
 
 async def crawl_urls(
-    start_urls: List[str],
+    start_urls: list[str],
     max_pages: int,
     max_depth: int,
     concurrency: int,
     request_timeout_secs: int,
     headless: bool,
-    proxy_url: Optional[str],
+    proxy_url: str | None,
     extract_mode: str,
 ) -> AsyncIterator[dict]:
     browser_config = BrowserConfig(
@@ -58,8 +59,8 @@ async def crawl_urls(
     )
 
     async with AsyncWebCrawler(config=browser_config) as crawler:
-        seen: Set[str] = set()
-        frontier: List[Tuple[str, int]] = []
+        seen: set[str] = set()
+        frontier: list[tuple[str, int]] = []
         for url in start_urls:
             if url not in seen:
                 seen.add(url)
@@ -71,8 +72,8 @@ async def crawl_urls(
             if current_depth > max_depth:
                 break
 
-            batch: List[str] = []
-            next_frontier: List[Tuple[str, int]] = []
+            batch: list[str] = []
+            next_frontier: list[tuple[str, int]] = []
 
             remaining = max_pages - processed
             while frontier and frontier[0][1] == current_depth and len(batch) < remaining:
