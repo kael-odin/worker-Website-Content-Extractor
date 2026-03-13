@@ -1,0 +1,12 @@
+{
+  "actorSpecification": 1,
+  "name": "crawl4ai-actor",
+  "title": "Crawl4AI Actor",
+  "description": "Apify Actor wrapper for crawl4ai.",
+  "version": "0.1",
+  "meta": {
+    "templateId": "python"
+  },
+  "input": "./input_schema.json",
+  "dockerfile": "../Dockerfile"
+}

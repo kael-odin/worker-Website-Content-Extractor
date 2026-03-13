@@ -1,0 +1,94 @@
+{
+  "title": "Crawl4AI Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "startUrls": {
+      "title": "Start URLs",
+      "type": "array",
+      "description": "List of URLs to crawl.",
+      "items": {
+        "type": "string"
+      },
+      "prefill": [
+        "https://example.com"
+      ],
+      "editor": "stringList"
+    },
+    "maxPages": {
+      "title": "Max Pages",
+      "type": "integer",
+      "description": "Maximum number of pages to process.",
+      "default": 50,
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "maxDepth": {
+      "title": "Max Depth",
+      "type": "integer",
+      "description": "Maximum crawl depth from each start URL.",
+      "default": 2,
+      "minimum": 0,
+      "maximum": 10
+    },
+    "concurrency": {
+      "title": "Concurrency",
+      "type": "integer",
+      "description": "Number of concurrent tasks.",
+      "default": 5,
+      "minimum": 1,
+      "maximum": 50
+    },
+    "requestTimeoutSecs": {
+      "title": "Request Timeout (seconds)",
+      "type": "integer",
+      "description": "Timeout per page request.",
+      "default": 60,
+      "minimum": 5,
+      "maximum": 600
+    },
+    "headless": {
+      "title": "Headless",
+      "type": "boolean",
+      "description": "Run browser in headless mode.",
+      "default": true
+    },
+    "useProxy": {
+      "title": "Use Proxy",
+      "type": "boolean",
+      "description": "Enable Apify proxy for requests.",
+      "default": false
+    },
+    "proxyGroups": {
+      "title": "Proxy Groups",
+      "type": "array",
+      "description": "Apify proxy groups to use.",
+      "items": {
+        "type": "string"
+      },
+      "editor": "stringList"
+    },
+    "extractMode": {
+      "title": "Extract Mode",
+      "type": "string",
+      "description": "Extraction strategy.",
+      "default": "markdown",
+      "enum": [
+        "markdown",
+        "html",
+        "text"
+      ]
+    },
+    "maxResults": {
+      "title": "Max Results",
+      "type": "integer",
+      "description": "Cap the number of output items.",
+      "default": 1000,
+      "minimum": 1,
+      "maximum": 200000
+    }
+  },
+  "required": [
+    "startUrls"
+  ]
+}
