@@ -144,7 +144,8 @@
     "userAgent": {
       "title": "User Agent",
       "type": "string",
-      "description": "Custom user agent string (optional)."
+      "description": "Custom user agent string (optional).",
+      "editor": "textfield"
     }
   },
   "required": [
