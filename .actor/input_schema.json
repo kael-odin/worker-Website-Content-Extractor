@@ -186,7 +186,8 @@
     "virtualScrollSelector": {
       "title": "Virtual Scroll Selector",
       "type": "string",
-      "description": "CSS selector for infinite-scroll container (e.g. #feed). When set, the crawler scrolls to load more content before extraction."
+      "description": "CSS selector for infinite-scroll container (e.g. #feed). When set, the crawler scrolls to load more content before extraction.",
+      "editor": "textfield"
     },
     "virtualScrollCount": {
       "title": "Virtual Scroll Count",
