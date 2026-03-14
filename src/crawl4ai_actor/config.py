@@ -16,7 +16,7 @@ class ActorInput(BaseModel):
     headless: bool = True
     use_proxy: bool = Field(default=False, alias="useProxy")
     proxy_groups: list[str] | None = Field(default=None, alias="proxyGroups")
-    extract_mode: str = Field(default="markdown", alias="extractMode")
+    extract_mode: Literal["markdown", "html", "text"] = Field(default="markdown", alias="extractMode")
     max_results: int = Field(default=1000, alias="maxResults", ge=1, le=200000)
     same_domain_only: bool = Field(default=True, alias="sameDomainOnly")
     include_patterns: list[str] = Field(default_factory=list, alias="includePatterns")
@@ -34,7 +34,7 @@ class ActorInput(BaseModel):
     virtual_scroll_selector: str | None = Field(default=None, alias="virtualScrollSelector")
     virtual_scroll_count: int = Field(default=10, alias="virtualScrollCount", ge=1, le=100)
     # Page load & wait (slow/SPA sites, targeted extraction)
-    wait_until: str = Field(default="domcontentloaded", alias="waitUntil")
+    wait_until: Literal["domcontentloaded", "load", "networkidle"] = Field(default="domcontentloaded", alias="waitUntil")
     page_load_wait_secs: float = Field(default=0, alias="pageLoadWaitSecs", ge=0, le=60)
     wait_for_selector: str | None = Field(default=None, alias="waitForSelector")
     wait_for_timeout_secs: int = Field(default=30, alias="waitForTimeoutSecs", ge=1, le=300)

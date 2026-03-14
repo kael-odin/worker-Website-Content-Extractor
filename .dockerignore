@@ -8,4 +8,5 @@ __pycache__/
 .github
 .idea
 .vscode
-scripts/ux_smoke_output.json
+scripts/ux_matrix_output.json
+scripts/ux_matrix_report.txt

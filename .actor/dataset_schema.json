@@ -49,6 +49,16 @@
       "links_external_count": {
         "type": ["integer", "null"]
       },
+      "links_internal": {
+        "type": ["array", "null"],
+        "items": { "type": "string" },
+        "description": "Internal link URLs (when includeLinkUrls or crawlMode=discover_only)"
+      },
+      "links_external": {
+        "type": ["array", "null"],
+        "items": { "type": "string" },
+        "description": "External link URLs (when includeLinkUrls or crawlMode=discover_only)"
+      },
       "extracted_at": {
         "type": ["string", "null"],
         "format": "date-time"
