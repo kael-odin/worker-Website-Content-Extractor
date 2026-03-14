@@ -1,5 +1,5 @@
 {
-  "description": "Crawls one or more start URLs, extracts page content (markdown, HTML, or text), and optionally follows same-domain links. Uses crawl4ai for browser-based extraction with configurable depth, concurrency, and output format.",
+  "description": "Crawls start URLs and extracts page content (markdown, HTML, or text) using Crawl4AI. On CafeScraper, the worker connects only to the platform's remote fingerprint browser via CDP (no local Chromium). Configurable depth, wait conditions, and output format.",
   "b": "startUrls",
   "properties": [
     {

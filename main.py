@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""CafeScraper worker: Website content extractor. Entry: main.py. Uses CafeSDK for params, logging, result push."""
+"""CafeScraper worker: Website content extractor. Uses crawl4ai + CDP when available (https://docs.crawl4ai.com/api/parameters/, https://docs.cafescraper.com/why-use-playwright)."""
 import asyncio
 import os
-import sys
-from pathlib import Path
-
-# Ensure src is on path so we can import crawl4ai_actor
-_root = Path(__file__).resolve().parent
-if str(_root / "src") not in sys.path:
-    sys.path.insert(0, str(_root / "src"))
-
-from pydantic import ValidationError
 
 from sdk import CafeSDK
 
-# After path setup
-from crawl4ai_actor.config import ActorInput
-from crawl4ai_actor.crawler import crawl_urls
+try:
+    from crawler_c4ai import run_crawler
+    _CRAWLER_BACKEND = "crawl4ai"
+except ImportError:
+    from scraper import run_crawler
+    _CRAWLER_BACKEND = "playwright"
 
 RESULT_TABLE_HEADERS = [
     {"label": "URL", "key": "url", "format": "text"},
@@ -41,10 +35,10 @@ RESULT_TABLE_HEADERS = [
     {"label": "Links internal", "key": "links_internal", "format": "array"},
     {"label": "Links external", "key": "links_external", "format": "array"},
 ]
+HEADER_KEYS = [h["key"] for h in RESULT_TABLE_HEADERS]
 
 
 def _normalize_start_urls(value):
-    """Normalize startUrls from CafeScraper requestList [{"url": "..."}] or stringList [{"string": "..."}] to list of strings."""
     if not value or not isinstance(value, list):
         return []
     out = []
@@ -61,28 +55,14 @@ def _normalize_start_urls(value):
 
 
 def _row_for_push(item: dict) -> dict:
-    """Ensure item is JSON-serializable and only includes known keys."""
-    keys = [h["key"] for h in RESULT_TABLE_HEADERS]
-    out = {}
-    for k in keys:
-        v = item.get(k)
-        if v is None or isinstance(v, (str, int, float, bool, list, dict)):
-            out[k] = v
-        else:
-            out[k] = str(v)
-    return out
+    return {k: item.get(k) if isinstance(item.get(k), (list, dict, str, int, float, bool, type(None))) else str(item.get(k)) for k in HEADER_KEYS}
 
 
-# Defaults when platform sends minimal input
 DEFAULT_INPUT = {
     "startUrls": [],
     "maxPages": 50,
     "maxDepth": 2,
-    "concurrency": 5,
     "requestTimeoutSecs": 60,
-    "headless": True,
-    "useProxy": False,
-    "proxyGroups": None,
     "extractMode": "markdown",
     "maxResults": 1000,
     "sameDomainOnly": True,
@@ -90,24 +70,43 @@ DEFAULT_INPUT = {
     "excludePatterns": [],
     "maxRetries": 2,
     "retryBackoffSecs": 2,
-    "maxRequestsPerMinute": 0,
-    "enableStealth": False,
-    "userAgent": None,
-    "cleanContent": True,
     "includeRawContent": False,
     "maxContentChars": 0,
     "contentExcerptChars": 300,
-    "wordCountThreshold": 0,
-    "virtualScrollSelector": None,
-    "virtualScrollCount": 10,
     "waitUntil": "domcontentloaded",
-    "pageLoadWaitSecs": 0,
-    "waitForSelector": None,
+    "waitForSelector": "",
     "waitForTimeoutSecs": 30,
-    "cssSelector": None,
+    "cssSelector": "",
     "crawlMode": "full",
     "includeLinkUrls": False,
+    "cleanContent": True,
+    "virtualScrollSelector": "",
+    "virtualScrollCount": 10,
+    "wordCountThreshold": 0,
 }
+
+# CafeScraper: Playwright must connect to remote fingerprint browser; local Chromium is not available.
+# Set LOCAL_DEV=1 only when testing locally with Chromium installed.
+REQUIRE_CDP = "PROXY_AUTH is required. On CafeScraper, Playwright must connect to the remote fingerprint browser; local Chromium is not available. For local testing only, set environment variable LOCAL_DEV=1."
+
+
+def _validate_and_clamp(input_dict: dict) -> None:
+    """Clamp numeric inputs to schema bounds and normalize enums."""
+    input_dict["maxPages"] = max(1, min(10000, int(input_dict.get("maxPages") or 50)))
+    input_dict["maxDepth"] = max(0, min(10, int(input_dict.get("maxDepth") or 2)))
+    input_dict["requestTimeoutSecs"] = max(5, min(600, int(input_dict.get("requestTimeoutSecs") or 60)))
+    input_dict["maxResults"] = max(1, min(200000, int(input_dict.get("maxResults") or 1000)))
+    input_dict["maxRetries"] = max(0, min(10, int(input_dict.get("maxRetries") or 2)))
+    input_dict["retryBackoffSecs"] = max(0, min(120, int(input_dict.get("retryBackoffSecs") or 2)))
+    input_dict["contentExcerptChars"] = max(0, min(5000, int(input_dict.get("contentExcerptChars") or 300)))
+    input_dict["maxContentChars"] = max(0, min(500000, int(input_dict.get("maxContentChars") or 0)))
+    input_dict["waitForTimeoutSecs"] = max(1, min(300, int(input_dict.get("waitForTimeoutSecs") or 30)))
+    e = (input_dict.get("extractMode") or "markdown").lower()
+    input_dict["extractMode"] = e if e in ("markdown", "html", "text") else "markdown"
+    c = (input_dict.get("crawlMode") or "full").lower()
+    input_dict["crawlMode"] = c if c in ("full", "discover_only") else "full"
+    w = (input_dict.get("waitUntil") or "domcontentloaded").lower()
+    input_dict["waitUntil"] = w if w in ("domcontentloaded", "load", "networkidle") else "domcontentloaded"
 
 
 async def run():
@@ -116,86 +115,62 @@ async def run():
         raw = {k: v for k, v in raw.items() if k != "version"}
         input_dict = {**DEFAULT_INPUT, **raw}
 
-        # Normalize startUrls (requestList / stringList → list of URL strings)
         start_urls = _normalize_start_urls(input_dict.get("startUrls"))
         if not start_urls:
-            CafeSDK.Log.error(
-                "Missing required input: startUrls. Example: [{\"url\": \"https://example.com\"}] or [\"https://example.com\"]"
-            )
+            CafeSDK.Log.error("Missing required input: startUrls.")
             CafeSDK.Result.push_data({"error": "Missing startUrls", "error_code": "400", "status": "failed"})
             return
         input_dict["startUrls"] = start_urls
 
-        # Normalize stringList arrays if present
-        for key in ("includePatterns", "excludePatterns", "proxyGroups"):
+        for key in ("includePatterns", "excludePatterns"):
             val = input_dict.get(key)
             if val and isinstance(val, list) and val and isinstance(val[0], dict) and "string" in (val[0] or {}):
                 input_dict[key] = [x.get("string", "").strip() for x in val if x and x.get("string")]
 
-        try:
-            actor_input = ActorInput(**input_dict)
-        except ValidationError as e:
-            errs = e.errors()
-            msg = errs[0].get("msg", str(e)) if errs else str(e)
-            loc = errs[0].get("loc", ())
-            hint = f" {loc[0]}: {msg}" if loc else f" {msg}"
-            CafeSDK.Log.error(f"Invalid input:{hint}")
-            CafeSDK.Result.push_data({"error": f"Invalid input:{hint}", "error_code": "400", "status": "failed"})
-            return
+        _validate_and_clamp(input_dict)
 
-        # Proxy: use platform proxy when PROXY_AUTH is set (CafeScraper)
+        # CafeScraper: must use remote fingerprint browser via CDP; local Chromium is not available.
         auth = os.environ.get("PROXY_AUTH")
-        proxy_url = f"socks5://{auth}@proxy-inner.cafescraper.com:6000" if auth else None
-        if proxy_url:
-            CafeSDK.Log.info("Using CafeScraper proxy from PROXY_AUTH")
-        if actor_input.use_proxy and not proxy_url:
-            CafeSDK.Log.warn("useProxy is true but PROXY_AUTH not set; running without proxy")
+        browser_cdp_url = f"ws://{auth}@chrome-ws-inner.cafescraper.com" if auth else None
+        if not browser_cdp_url and not os.environ.get("LOCAL_DEV"):
+            CafeSDK.Log.error(REQUIRE_CDP)
+            CafeSDK.Result.push_data({
+                "error": REQUIRE_CDP,
+                "error_code": "400",
+                "status": "failed",
+            })
+            return
+        if browser_cdp_url:
+            CafeSDK.Log.info("Connecting to CafeScraper fingerprint browser via CDP")
+        else:
+            CafeSDK.Log.info("LOCAL_DEV=1: using local Chromium (local testing only)")
+        CafeSDK.Log.debug(f"Crawler backend: {_CRAWLER_BACKEND}")
 
         CafeSDK.Result.set_table_header(RESULT_TABLE_HEADERS)
-        CafeSDK.Log.info(f"Starting crawl: {len(actor_input.start_urls)} start URL(s), maxPages={actor_input.max_pages}")
+        CafeSDK.Log.info(f"Starting crawl: {len(start_urls)} start URL(s), maxPages={input_dict['maxPages']}, maxDepth={input_dict['maxDepth']}")
 
-        processed = 0
-        async for item in crawl_urls(
-            start_urls=actor_input.start_urls,
-            max_pages=actor_input.max_pages,
-            max_depth=actor_input.max_depth,
-            concurrency=actor_input.concurrency,
-            request_timeout_secs=actor_input.request_timeout_secs,
-            headless=actor_input.headless,
-            proxy_url=proxy_url,
-            extract_mode=actor_input.extract_mode,
-            same_domain_only=actor_input.same_domain_only,
-            include_patterns=actor_input.include_patterns,
-            exclude_patterns=actor_input.exclude_patterns,
-            max_retries=actor_input.max_retries,
-            retry_backoff_secs=actor_input.retry_backoff_secs,
-            max_requests_per_minute=actor_input.max_requests_per_minute,
-            enable_stealth=actor_input.enable_stealth,
-            user_agent=actor_input.user_agent,
-            clean_content=actor_input.clean_content,
-            include_raw_content=actor_input.include_raw_content,
-            max_content_chars=actor_input.max_content_chars,
-            content_excerpt_chars=actor_input.content_excerpt_chars,
-            word_count_threshold=actor_input.word_count_threshold,
-            virtual_scroll_selector=actor_input.virtual_scroll_selector,
-            virtual_scroll_count=actor_input.virtual_scroll_count,
-            wait_until=actor_input.wait_until,
-            page_load_wait_secs=actor_input.page_load_wait_secs,
-            wait_for_selector=actor_input.wait_for_selector,
-            wait_for_timeout_secs=actor_input.wait_for_timeout_secs,
-            css_selector=actor_input.css_selector,
-            crawl_mode=actor_input.crawl_mode,
-            include_link_urls=actor_input.include_link_urls,
-        ):
+        class _Log:
+            @staticmethod
+            def info(msg): CafeSDK.Log.info(msg)
+            @staticmethod
+            def warning(msg): CafeSDK.Log.warn(msg)
+            @staticmethod
+            def error(msg): CafeSDK.Log.error(msg)
+            @staticmethod
+            def debug(msg): CafeSDK.Log.debug(msg)
+
+        def push(item):
             CafeSDK.Result.push_data(_row_for_push(item))
-            processed += 1
-            if processed >= actor_input.max_results:
-                break
 
-        CafeSDK.Log.info(f"Run completed: {processed} item(s) pushed")
+        await run_crawler(input_dict, browser_cdp_url=browser_cdp_url, log=_Log(), push_data=push)
+        CafeSDK.Log.info("Run completed")
     except Exception as e:
-        CafeSDK.Log.error(f"Run error: {e}")
-        CafeSDK.Result.push_data({"error": str(e), "error_code": "500", "status": "failed"})
+        msg = str(e) if e else "Unknown error"
+        CafeSDK.Log.error(f"Run error: {msg}")
+        try:
+            CafeSDK.Result.push_data({"error": msg, "error_code": "500", "status": "failed"})
+        except Exception:
+            pass
         raise
 
 
