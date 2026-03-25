@@ -1,0 +1,197 @@
+{
+  "description": "Crawls URLs and extracts page content (markdown, HTML, or text) using Crawl4AI. Supports configurable depth, wait conditions, and output format. | 使用 Crawl4AI 抓取 URL 并提取页面内容（Markdown、HTML 或文本），支持可配置的深度、等待条件和输出格式。",
+  "b": "startUrls",
+  "properties": [
+    {
+      "title": "Start URLs | 起始 URL",
+      "name": "startUrls",
+      "type": "array",
+      "editor": "requestList",
+      "description": "Starting URLs to crawl (e.g. https://example.com). One or more URLs. | 开始抓取的 URL（如 https://example.com），支持多个 URL。",
+      "default": [{ "url": "https://example.com" }],
+      "required": true
+    },
+    {
+      "title": "Max Pages | 最大页面数",
+      "name": "maxPages",
+      "type": "integer",
+      "editor": "number",
+      "description": "Maximum pages to process in total (1–10000). | 总共处理的最大页面数（1-10000）。",
+      "default": 50
+    },
+    {
+      "title": "Max Depth | 最大深度",
+      "name": "maxDepth",
+      "type": "integer",
+      "editor": "number",
+      "description": "Maximum link depth from each start URL (0–10). | 从每个起始 URL 开始的最大链接深度（0-10）。",
+      "default": 2
+    },
+    {
+      "title": "Concurrency | 并发数",
+      "name": "concurrency",
+      "type": "integer",
+      "editor": "number",
+      "description": "Number of concurrent page tasks (1–50). | 并发页面任务数（1-50）。",
+      "default": 5
+    },
+    {
+      "title": "Request Timeout (secs) | 请求超时(秒)",
+      "name": "requestTimeoutSecs",
+      "type": "integer",
+      "editor": "number",
+      "description": "Timeout per page request in seconds (5–600). | 每个页面请求的超时时间（秒，5-600）。",
+      "default": 60
+    },
+    {
+      "title": "Headless | 无头模式",
+      "name": "headless",
+      "type": "boolean",
+      "editor": "switch",
+      "description": "Run browser headless. | 以无头模式运行浏览器。",
+      "default": true
+    },
+    {
+      "title": "Use Proxy | 使用代理",
+      "name": "useProxy",
+      "type": "boolean",
+      "editor": "switch",
+      "description": "Use platform proxy when PROXY_AUTH is set. | 当 PROXY_AUTH 设置时使用平台代理。",
+      "default": false
+    },
+    {
+      "title": "Extract Mode | 提取模式",
+      "name": "extractMode",
+      "type": "string",
+      "editor": "select",
+      "description": "Output content format: markdown, html, or text. | 输出内容格式：Markdown、HTML 或纯文本。",
+      "options": [
+        { "label": "Markdown", "value": "markdown" },
+        { "label": "HTML", "value": "html" },
+        { "label": "Text | 纯文本", "value": "text" }
+      ],
+      "default": "markdown"
+    },
+    {
+      "title": "Max Results | 最大结果数",
+      "name": "maxResults",
+      "type": "integer",
+      "editor": "number",
+      "description": "Maximum output items to push (1–200000). | 推送的最大输出项数（1-200000）。",
+      "default": 1000
+    },
+    {
+      "title": "Same Domain Only | 仅同域名",
+      "name": "sameDomainOnly",
+      "type": "boolean",
+      "editor": "switch",
+      "description": "Only follow links within start URL domains. | 仅跟踪起始 URL 域名内的链接。",
+      "default": true
+    },
+    {
+      "title": "Include URL Patterns | 包含 URL 模式",
+      "name": "includePatterns",
+      "type": "array",
+      "editor": "stringList",
+      "description": "Only include URLs matching these regex patterns (optional). | 仅包含匹配这些正则模式的 URL（可选）。",
+      "default": []
+    },
+    {
+      "title": "Exclude URL Patterns | 排除 URL 模式",
+      "name": "excludePatterns",
+      "type": "array",
+      "editor": "stringList",
+      "description": "Exclude URLs matching these regex patterns. | 排除匹配这些正则模式的 URL。",
+      "default": []
+    },
+    {
+      "title": "Max Retries | 最大重试",
+      "name": "maxRetries",
+      "type": "integer",
+      "editor": "number",
+      "description": "Retry failed pages up to this count (0–10). | 重试失败页面的次数（0-10）。",
+      "default": 2
+    },
+    {
+      "title": "Clean Content | 清理内容",
+      "name": "cleanContent",
+      "type": "boolean",
+      "editor": "switch",
+      "description": "Remove navigation-heavy lines and normalize whitespace. | 移除导航密集的行并规范化空白。",
+      "default": true
+    },
+    {
+      "title": "Include Raw Content | 包含原始内容",
+      "name": "includeRawContent",
+      "type": "boolean",
+      "editor": "switch",
+      "description": "Include unmodified content in a separate field. | 在单独字段中包含未修改的内容。",
+      "default": false
+    },
+    {
+      "title": "Max Content Chars | 最大内容字符数",
+      "name": "maxContentChars",
+      "type": "integer",
+      "editor": "number",
+      "description": "Truncate content to this length (0 = unlimited, max 500000). | 截断内容到此长度（0=不限制，最大 500000）。",
+      "default": 0
+    },
+    {
+      "title": "Content Excerpt Chars | 内容摘要字符数",
+      "name": "contentExcerptChars",
+      "type": "integer",
+      "editor": "number",
+      "description": "Length of content excerpt for previews (0–5000). | 预览用内容摘要的长度（0-5000）。",
+      "default": 300
+    },
+    {
+      "title": "Wait Until | 等待条件",
+      "name": "waitUntil",
+      "type": "string",
+      "editor": "select",
+      "description": "Page load strategy: domcontentloaded (fast), load, or networkidle (SPA/slow sites). | 页面加载策略：domcontentloaded（快）、load 或 networkidle（SPA/慢站点）。",
+      "options": [
+        { "label": "DOM Content Loaded | DOM加载完成", "value": "domcontentloaded" },
+        { "label": "Load | 完全加载", "value": "load" },
+        { "label": "Network Idle | 网络空闲", "value": "networkidle" }
+      ],
+      "default": "domcontentloaded"
+    },
+    {
+      "title": "Wait For Selector | 等待选择器",
+      "name": "waitForSelector",
+      "type": "string",
+      "editor": "input",
+      "description": "CSS selector to wait for before extraction (e.g. .article-body). | 提取前等待的 CSS 选择器（如 .article-body）。",
+      "default": ""
+    },
+    {
+      "title": "CSS Selector (Extract Region) | CSS选择器(提取区域)",
+      "name": "cssSelector",
+      "type": "string",
+      "editor": "input",
+      "description": "Extract only content inside this CSS selector (e.g. main, .content). | 仅提取此 CSS 选择器内的内容（如 main, .content）。",
+      "default": ""
+    },
+    {
+      "title": "Crawl Mode | 抓取模式",
+      "name": "crawlMode",
+      "type": "string",
+      "editor": "select",
+      "description": "full = extract content; discover_only = only URLs and links (no content). | full=提取内容；discover_only=仅 URL 和链接（无内容）。",
+      "options": [
+        { "label": "Full (extract content) | 完整模式", "value": "full" },
+        { "label": "Discover only (links) | 仅发现链接", "value": "discover_only" }
+      ],
+      "default": "full"
+    },
+    {
+      "title": "Include Link URLs | 包含链接 URL",
+      "name": "includeLinkUrls",
+      "type": "boolean",
+      "editor": "switch",
+      "description": "Include links_internal and links_external arrays in each item (full mode). | 在每项中包含内部链接和外部链接数组（完整模式）。",
+      "default": false
+    }
+  ]
+}
