@@ -1,0 +1,516 @@
+{
+  "generated_at": "2026-03-14T01:15:13.936572+00:00",
+  "group_filter": null,
+  "scenarios": [
+    {
+      "scenario": {
+        "id": "marketing_home",
+        "group": "extended",
+        "description": "Marketing homepage with dynamic content",
+        "input": {
+          "start_urls": [
+            "https://www.apify.com"
+          ],
+          "extract_mode": "markdown",
+          "max_pages": 3,
+          "max_depth": 1
+        }
+      },
+      "summary": {
+        "id": "marketing_home",
+        "description": "Marketing homepage with dynamic content",
+        "status": "ok",
+        "error": null,
+        "count": 1,
+        "success": 1,
+        "avg_content_length": 2194,
+        "errors": {
+          "none": 1
+        },
+        "sample_urls": [
+          "https://www.apify.com"
+        ]
+      },
+      "items": [
+        {
+          "url": "https://www.apify.com",
+          "success": true,
+          "status_code": 301,
+          "error_message": "",
+          "error_type": null,
+          "content": "# Get real-time web data for your AI\nApify Actors scrape up-to-date web data from any website for AI apps and agents, social media monitoring, competitive intelligence, lead generation, and product research.\nTry it now\nTrusted by global technology leaders\n## Not just a web scraping API\n##  Easily integrate\nZapierGitHubGoogle SheetsPineconeany appAirbyteMCP clientsGoogle DriveSlackZapier\nwith Actors\n## Build and deploy reliable scrapers\nOpen-source tools\nProxies\nUnblocking\nCloud deployment\nMonitoring\nData processing\n### We love open source\nApify works great with both Python and JavaScript, as well as Playwright, Puppeteer, Selenium, Scrapy, and Crawlee - our own web crawling and browser automation library.\nJavaScript\nPython\n```\n\n1import { PuppeteerCrawler, Dataset } from \"crawlee\";\n\n2\n\n3const crawler = new PuppeteerCrawler({\n\n4  async requestHandler({ request, page, enqueueLinks }) {\n\n5    await Dataset.pushData({\n\n6      url: request.url,\n\n7      title: await page.title(),\n\n8    });\n\n9    await enqueueLinks();\n\n10  },\n\n11});\n\n12\n\n13await crawler.run([\"https://crawlee.dev\"]);\n\n```\n\n## Learn.\n## Code.\n## Connect.\n## Publish Actors. Get paid.\n### Reach thousands of new customers\nBuilding and running a SaaS is hard. Building an Actor and selling it on Apify Store is 10x easier. Get users from day one.\n#### No upfront costs\nPublishing your Actor is free of charge—the customers pay for the computing resources. New creators get $500 free platform credits.\n#### Rely on Apify infra\nActors scale automatically as you gain new users. You don’t need to worry about compute, storage, proxies, or authentication.\n#### Billing is on us\nHandling payments, taxes, and invoicing is a painful part of running a SaaS. Apify does all that and sends you a net payout every month.\n## Enterprise-grade solution\nSecure and reliable web data extraction provider for any scale.\n99.95% uptime. SOC2, GDPR, and CCPA compliant.\n## Apify Professional Services\nOur experienced team can help you design, implement, and successfully execute your web scraping project.\n## It's time to run your first Actor.\nProduct\n\nDevelopers\n\nConsulting\n\nSupport\n\nSpotlight\n\nCompany\n\nSocials\n\nSecurity\n\nReviews\n\nCookies",
+          "content_raw": null,
+          "content_excerpt": "# Get real-time web data for your AI\nApify Actors scrape up-to-date web data from any website for AI apps and agents, social media monitoring, competitive intelligence, lead generation, and product re",
+          "content_truncated": false,
+          "title": "Apify: Full-stack web scraping and data extraction platform",
+          "meta_description": "Cloud platform for web scraping, browser automation, AI agents, and data for AI. Use 19,000+ ready-made tools, code templates, or order a custom solution.",
+          "content_length": 2194,
+          "content_hash": "e52885668502807e532822455082b28df32d3691155ff1adb1861bcd7be18342",
+          "links_internal_count": 71,
+          "links_external_count": 16,
+          "extracted_at": "2026-03-14T01:15:21.584532+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "knowledge_base",
+        "group": "extended",
+        "description": "Static knowledge page",
+        "input": {
+          "start_urls": [
+            "https://www.wikipedia.org"
+          ],
+          "extract_mode": "markdown",
+          "max_pages": 3,
+          "max_depth": 1
+        }
+      },
+      "summary": {
+        "id": "knowledge_base",
+        "description": "Static knowledge page",
+        "status": "ok",
+        "error": null,
+        "count": 1,
+        "success": 1,
+        "avg_content_length": 2031,
+        "errors": {
+          "none": 1
+        },
+        "sample_urls": [
+          "https://www.wikipedia.org"
+        ]
+      },
+      "items": [
+        {
+          "url": "https://www.wikipedia.org",
+          "success": true,
+          "status_code": 200,
+          "error_message": "",
+          "error_type": null,
+          "content": "#  Wikipedia  **The Free Encyclopedia**\n#  Wikipedia  **25 years of the free encyclopedia**\nUnlock birthday surprises on Wikipedia\nLearn how to turn on Birthday mode so you and Baby Globe can explore Wikipedia together!\n##  Unlock birthday surprises on Wikipedia\nLearn how to turn on Birthday mode so you and Baby Globe can explore Wikipedia together!\nLearn more\nSearch Wikipedia\nnl Afrikaans Shqip العربية Asturianu Azərbaycanca Български 閩南語 / Bân-lâm-gú বাংলা Беларуская Català Čeština Cymraeg Dansk Deutsch Eesti Ελληνικά English Español Esperanto Euskara فارسی Français Galego 한국어 Հայերեն हिन्दी Hrvatski Bahasa Indonesia Italiano עברית ქართული Ladin Latina Latviešu Lietuvių Magyar Македонски Malagasy मराठी مصرى Bahasa Melayu Bahaso Minangkabau မြန်မာဘာသာ Nederlands 日本語 Norsk (bokmål) Norsk (nynorsk) Нохчийн Oʻzbekcha / Ўзбекча Polski Português Қазақша / Qazaqşa / قازاقشا Română Simple English Sinugboanong Binisaya Slovenčina Slovenščina Српски / Srpski Srpskohrvatski / Српскохрватски Suomi Svenska Kiswahili தமிழ் Татарча / Tatarça తెలుగు ภาษาไทย Тоҷикӣ تۆرکجه Türkçe Українська اردو Tiếng Việt Winaray 中文 Русский 粵語\n_Search_\nRead Wikipedia in your language\n##  1,000,000+  articles\n\n##  100,000+  articles\n* Norsk\n\n##  10,000+  articles\n\n##  1,000+  articles\n\n##  100+  articles\n\n* * *\nWikipedia is hosted by the Wikimedia Foundation, a non-profit organization that also hosts a range of other projects.\n**[ Download Wikipedia for Android or iOS ](https://en.wikipedia.org/wiki/List_of_Wikipedia_mobile_applications) **\nSave your favorite articles to read offline, sync your reading lists across devices and customize your reading experience with the official Wikipedia app.\n\nBirthday mode\n* * *\nThis page is available under the [Creative Commons Attribution-ShareAlike License](https://creativecommons.org/licenses/by-sa/4.0/) [Terms of Use](https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Terms_of_Use) [Privacy Policy](https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy)",
+          "content_raw": null,
+          "content_excerpt": "#  Wikipedia  **The Free Encyclopedia**\n#  Wikipedia  **25 years of the free encyclopedia**\nUnlock birthday surprises on Wikipedia\nLearn how to turn on Birthday mode so you and Baby Globe can explore ",
+          "content_truncated": false,
+          "title": "Wikipedia",
+          "meta_description": "Wikipedia is a free online encyclopedia, created and edited by volunteers around the world and hosted by the Wikimedia Foundation.",
+          "content_length": 2031,
+          "content_hash": "6cedd54d572a22bf7d1b14f0be581b0bf8d12a2dbe415525f465db2f702ea183",
+          "links_internal_count": 344,
+          "links_external_count": 20,
+          "extracted_at": "2026-03-14T01:15:26.676261+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "simple_static",
+        "group": "core",
+        "description": "Small static site",
+        "input": {
+          "start_urls": [
+            "https://example.com"
+          ],
+          "extract_mode": "text",
+          "max_pages": 1,
+          "max_depth": 0
+        }
+      },
+      "summary": {
+        "id": "simple_static",
+        "description": "Small static site",
+        "status": "ok",
+        "error": null,
+        "count": 1,
+        "success": 1,
+        "avg_content_length": 118,
+        "errors": {
+          "none": 1
+        },
+        "sample_urls": [
+          "https://example.com"
+        ]
+      },
+      "items": [
+        {
+          "url": "https://example.com",
+          "success": true,
+          "status_code": 200,
+          "error_message": "",
+          "error_type": null,
+          "content": "# Example Domain\nThis domain is for use in documentation examples without needing permission. Avoid use in operations.",
+          "content_raw": null,
+          "content_excerpt": "# Example Domain\nThis domain is for use in documentation examples without needing permission. Avoid use in operations.",
+          "content_truncated": false,
+          "title": "Example Domain",
+          "meta_description": null,
+          "content_length": 118,
+          "content_hash": "32940578d3c8882d50aa8c6360d008864eacd641cf637af3ae6449bf60635de3",
+          "links_internal_count": 0,
+          "links_external_count": 1,
+          "extracted_at": "2026-03-14T01:15:30.889766+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "mixed_start_urls",
+        "group": "core",
+        "description": "Mixed valid/invalid start URLs (normalization + filtering)",
+        "input": {
+          "start_urls": [
+            " https://EXAMPLE.com#section ",
+            "mailto:test@example.com",
+            "javascript:alert(1)",
+            "/relative/path"
+          ],
+          "extract_mode": "text",
+          "max_pages": 1,
+          "max_depth": 0
+        }
+      },
+      "summary": {
+        "id": "mixed_start_urls",
+        "description": "Mixed valid/invalid start URLs (normalization + filtering)",
+        "status": "ok",
+        "error": null,
+        "count": 1,
+        "success": 1,
+        "avg_content_length": 118,
+        "errors": {
+          "none": 1
+        },
+        "sample_urls": [
+          "https://example.com"
+        ]
+      },
+      "items": [
+        {
+          "url": "https://example.com",
+          "success": true,
+          "status_code": 200,
+          "error_message": "",
+          "error_type": null,
+          "content": "# Example Domain\nThis domain is for use in documentation examples without needing permission. Avoid use in operations.",
+          "content_raw": null,
+          "content_excerpt": "# Example Domain\nThis domain is for use in documentation examples without needing permission. Avoid use in operations.",
+          "content_truncated": false,
+          "title": "Example Domain",
+          "meta_description": null,
+          "content_length": 118,
+          "content_hash": "32940578d3c8882d50aa8c6360d008864eacd641cf637af3ae6449bf60635de3",
+          "links_internal_count": 0,
+          "links_external_count": 1,
+          "extracted_at": "2026-03-14T01:15:35.090405+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "developer_docs",
+        "group": "extended",
+        "description": "Docs site with deep nav",
+        "input": {
+          "start_urls": [
+            "https://docs.apify.com/"
+          ],
+          "extract_mode": "markdown",
+          "max_pages": 3,
+          "max_depth": 1
+        }
+      },
+      "summary": {
+        "id": "developer_docs",
+        "description": "Docs site with deep nav",
+        "status": "ok",
+        "error": null,
+        "count": 3,
+        "success": 3,
+        "avg_content_length": 3017,
+        "errors": {
+          "none": 3
+        },
+        "sample_urls": [
+          "https://docs.apify.com/",
+          "https://docs.apify.com",
+          "https://docs.apify.com/academy"
+        ]
+      },
+      "items": [
+        {
+          "url": "https://docs.apify.com/",
+          "success": true,
+          "status_code": 200,
+          "error_message": "",
+          "error_type": null,
+          "content": "Search Apify Docs...\n# Apify Documentation\nLearn how to put the web to work with Apify.\n## Getting started\nApify is all about Actors—a new way to package your code to make it easy to share, integrate, and build upon.\n### [What is an Actor](https://docs.apify.com/platform/actors)### [Run an existing Actor](https://docs.apify.com/platform/actors/running)### [Develop your own Actor](https://docs.apify.com/platform/actors/development)### [Publish and monetize your Actor](https://docs.apify.com/platform/actors/publishing)\n## Platform\nThe full reference of the Apify platform.\n#### [Actors Develop, run, and share web scraping and automation tools in the cloud. ](https://docs.apify.com/platform/actors)#### [Storage Store files and results of your web scraping jobs, and export it to various formats. ](https://docs.apify.com/platform/storage)#### [Proxy Avoid blocking by smartly rotating datacenter and residential IP addresses. ](https://docs.apify.com/platform/proxy)#### [Schedules Automatically start Actors and saved tasks at specific times. ](https://docs.apify.com/platform/schedules)#### [Integrations Connect Actors with your favorite web apps and cloud services. ](https://docs.apify.com/platform/integrations)#### [Monitoring Check the performance of your Actors, validate data quality, and receive alerts. ](https://docs.apify.com/platform/monitoring)#### [Collaboration Share Actors with other people, manage your organizations and permissions. ](https://docs.apify.com/platform/collaboration)#### [Security Learn about Apify platform security and data protection. ](https://docs.apify.com/platform/security)#### [MCP Discover and use Actors with AI agents and LLMs via Apify MCP server. ](https://docs.apify.com/platform/integrations/mcp)\n### Apify API\nInteract with the Apify platform from your applications.\n\n### Apify SDK\nSoftware toolkits for developing new Actors.\n\n### Apify CLI\nControl the Apify platform from terminal or shell scripts.\n\n## Apify Academy\nFree practical courses on web scraping and the Apify platform. Go from beginner to expert, all in one place.\n#### [Web scraping for beginners Learn the basics of web scraping and how to develop your own scraper. ](https://docs.apify.com/academy/scraping-basics-javascript)#### [Introduction to the Apify platform Learn the basics of the Apify platform and how to use it for your scraping projects. ](https://docs.apify.com/academy/apify-platform)#### [API scraping Learn how to efficiently extract data from web pages' APIs. ](https://docs.apify.com/academy/api-scraping)#### [Anti-scraping protections Understand the various anti-scraping measures and how to avoid them. ](https://docs.apify.com/academy/anti-scraping)#### [Advanced web scraping Learn how to extract data from more complicated websites. ](https://docs.apify.com/academy/advanced-web-scraping)#### [Deploying your code to Apify Learn how to easily move your existing projects to the Apify platform. ](https://docs.apify.com/academy/deploying-your-code)\n## Open-source tools\n#### [Crawlee](https://crawlee.dev)\nWeb crawling, scraping, and browser automation library for Node.js and Python with autoscaling and proxies.\n#### [Fingerprint Suite](https://github.com/apify/fingerprint-suite)\nToolkit for generating and injecting realistic browser fingerprints into Playwright and Puppeteer.\n#### [impit](https://github.com/apify/impit)\nRust-based HTTP client with browser impersonation. Bindings for Node.js, Python, and CLI.\n#### [mcpc](https://github.com/apify/mcp-cli)\nCLI client for the Model Context Protocol (MCP) for server exploration, scripting, and code mode.\n#### [proxy-chain](https://github.com/apify/proxy-chain)\nNode.js proxy server with SSL, authentication, and upstream proxy chaining.\n#### [Actor whitepaper](https://whitepaper.actor)\nOpen specification for Actors, the serverless microapps at the core of the Apify platform.\n## Actor templates\nCreate new web scraping projects using ready-made templates for various programming languages and scraping libraries.\nLoading Actor templates ...\n## Community & Help\n## More reading\n#### [Blog Company and product updates, tips and stories from the world of web scraping. ](https://blog.apify.com/)#### [Changelog See what's new on the Apify platform. ](https://apify.com/change-log)\n## Monetize your code\nPublish your Actors on Apify Store and earn regular passive income.\nLearn\n\nAPI\n\nSDK\n\nOther\n\nMore",
+          "content_raw": null,
+          "content_excerpt": "Search Apify Docs...\n# Apify Documentation\nLearn how to put the web to work with Apify.\n## Getting started\nApify is all about Actors—a new way to package your code to make it easy to share, integrate,",
+          "content_truncated": false,
+          "title": "Apify Documentation",
+          "meta_description": null,
+          "content_length": 4405,
+          "content_hash": "2dc7e8b1a9c9e18d4c8c123d593a7c79ee0622fa74bc33defbe3d46a20819b7c",
+          "links_internal_count": 44,
+          "links_external_count": 9,
+          "extracted_at": "2026-03-14T01:15:42.864417+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        },
+        {
+          "url": "https://docs.apify.com",
+          "success": true,
+          "status_code": 200,
+          "error_message": "",
+          "error_type": null,
+          "content": "# Apify Documentation\nLearn how to put the web to work with Apify.\n## Getting started\nApify is all about Actors—a new way to package your code to make it easy to share, integrate, and build upon.\n### [What is an Actor](https://docs.apify.com/platform/actors)### [Run an existing Actor](https://docs.apify.com/platform/actors/running)### [Develop your own Actor](https://docs.apify.com/platform/actors/development)### [Publish and monetize your Actor](https://docs.apify.com/platform/actors/publishing)\n## Platform\nThe full reference of the Apify platform.\n#### [Actors Develop, run, and share web scraping and automation tools in the cloud. ](https://docs.apify.com/platform/actors)#### [Storage Store files and results of your web scraping jobs, and export it to various formats. ](https://docs.apify.com/platform/storage)#### [Proxy Avoid blocking by smartly rotating datacenter and residential IP addresses. ](https://docs.apify.com/platform/proxy)#### [Schedules Automatically start Actors and saved tasks at specific times. ](https://docs.apify.com/platform/schedules)#### [Integrations Connect Actors with your favorite web apps and cloud services. ](https://docs.apify.com/platform/integrations)#### [Monitoring Check the performance of your Actors, validate data quality, and receive alerts. ](https://docs.apify.com/platform/monitoring)#### [Collaboration Share Actors with other people, manage your organizations and permissions. ](https://docs.apify.com/platform/collaboration)#### [Security Learn about Apify platform security and data protection. ](https://docs.apify.com/platform/security)#### [MCP Discover and use Actors with AI agents and LLMs via Apify MCP server. ](https://docs.apify.com/platform/integrations/mcp)\n### Apify API\nInteract with the Apify platform from your applications.\n\n### Apify SDK\nSoftware toolkits for developing new Actors.\n\n### Apify CLI\nControl the Apify platform from terminal or shell scripts.\n\n## Apify Academy\nFree practical courses on web scraping and the Apify platform. Go from beginner to expert, all in one place.\n#### [Web scraping for beginners Learn the basics of web scraping and how to develop your own scraper. ](https://docs.apify.com/academy/scraping-basics-javascript)#### [Introduction to the Apify platform Learn the basics of the Apify platform and how to use it for your scraping projects. ](https://docs.apify.com/academy/apify-platform)#### [API scraping Learn how to efficiently extract data from web pages' APIs. ](https://docs.apify.com/academy/api-scraping)#### [Anti-scraping protections Understand the various anti-scraping measures and how to avoid them. ](https://docs.apify.com/academy/anti-scraping)#### [Advanced web scraping Learn how to extract data from more complicated websites. ](https://docs.apify.com/academy/advanced-web-scraping)#### [Deploying your code to Apify Learn how to easily move your existing projects to the Apify platform. ](https://docs.apify.com/academy/deploying-your-code)\n## Open-source tools\n#### [Crawlee](https://crawlee.dev)\nWeb crawling, scraping, and browser automation library for Node.js and Python with autoscaling and proxies.\n#### [Fingerprint Suite](https://github.com/apify/fingerprint-suite)\nToolkit for generating and injecting realistic browser fingerprints into Playwright and Puppeteer.\n#### [impit](https://github.com/apify/impit)\nRust-based HTTP client with browser impersonation. Bindings for Node.js, Python, and CLI.\n#### [mcpc](https://github.com/apify/mcp-cli)\nCLI client for the Model Context Protocol (MCP) for server exploration, scripting, and code mode.\n#### [proxy-chain](https://github.com/apify/proxy-chain)\nNode.js proxy server with SSL, authentication, and upstream proxy chaining.\n#### [Actor whitepaper](https://whitepaper.actor)\nOpen specification for Actors, the serverless microapps at the core of the Apify platform.\n## Actor templates\nCreate new web scraping projects using ready-made templates for various programming languages and scraping libraries.\nLoading Actor templates ...\n## Community & Help\n## More reading\n#### [Blog Company and product updates, tips and stories from the world of web scraping. ](https://blog.apify.com/)#### [Changelog See what's new on the Apify platform. ](https://apify.com/change-log)\n## Monetize your code\nPublish your Actors on Apify Store and earn regular passive income.\nLearn\n\nAPI\n\nSDK\n\nOther\n\nMore",
+          "content_raw": null,
+          "content_excerpt": "# Apify Documentation\nLearn how to put the web to work with Apify.\n## Getting started\nApify is all about Actors—a new way to package your code to make it easy to share, integrate, and build upon.\n### ",
+          "content_truncated": false,
+          "title": "Apify Documentation",
+          "meta_description": null,
+          "content_length": 4384,
+          "content_hash": "4545a81a21345e2f7a3e1c48a6798d2a3bdb953fdc049b66b633739d3943c06c",
+          "links_internal_count": 44,
+          "links_external_count": 9,
+          "extracted_at": "2026-03-14T01:15:45.412057+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        },
+        {
+          "url": "https://docs.apify.com/academy",
+          "success": true,
+          "status_code": 200,
+          "error_message": "",
+          "error_type": null,
+          "content": "* Build & publish Actors\n\n# Apify Academy\nCopy for LLM\nLearn everything about web scraping and automation with our free courses that will turn you into an expert scraper developer.\n## Beginner courses\n## Advanced web scraping courses\nLearn\n\nAPI\n\nSDK\n\nOther\n\nMore",
+          "content_raw": null,
+          "content_excerpt": "* Build & publish Actors\n\n# Apify Academy\nCopy for LLM\nLearn everything about web scraping and automation with our free courses that will turn you into an expert scraper developer.\n## Beginner courses",
+          "content_truncated": false,
+          "title": "Apify Academy | Academy | Apify Documentation",
+          "meta_description": "Learn everything about web scraping and automation with our free courses that will turn you into an expert scraper developer.",
+          "content_length": 262,
+          "content_hash": "339fbdc39a655051616b571fcfce79c3e5b145010c20edc5507c56b67f0923cb",
+          "links_internal_count": 33,
+          "links_external_count": 9,
+          "extracted_at": "2026-03-14T01:15:47.033322+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "blog",
+        "group": "extended",
+        "description": "Blog with mixed content",
+        "input": {
+          "start_urls": [
+            "https://blog.apify.com/"
+          ],
+          "extract_mode": "markdown",
+          "max_pages": 3,
+          "max_depth": 1,
+          "include_patterns": [
+            "/20"
+          ]
+        }
+      },
+      "summary": {
+        "id": "blog",
+        "description": "Blog with mixed content",
+        "status": "ok",
+        "error": null,
+        "count": 1,
+        "success": 1,
+        "avg_content_length": 2574,
+        "errors": {
+          "none": 1
+        },
+        "sample_urls": [
+          "https://blog.apify.com/"
+        ]
+      },
+      "items": [
+        {
+          "url": "https://blog.apify.com/",
+          "success": true,
+          "status_code": 200,
+          "error_message": "",
+          "error_type": null,
+          "content": "Get data with ready-made web scrapers for popular websites\nPre-built web scraping tools\nBuild and run serverless programs\nConnect with apps and services\nStore results for web scrapers\nRotate scraper IP addresses\nWeb scraping and crawling library\nFull reference for the Apify platform\nCourses for beginners and experts\nPython, JavaScript, and TypeScript\nWith CLI or GitHub integration\nEarn passive income from sharing your Actors\nAdvice and answers about Apify\nTell us the Actors you want\nSee what’s new on Apify\nFind out how others use Apify\n\n# Apify Blog\nSearch posts\n...\n##  [State of web scraping report 2026](https://blog.apify.com/web-scraping-report-2026/)\nWe asked hundreds of web scraping professionals about proxy usage, infrastructure, bot detection, and AI-driven scraping to find out where the web scraping industry is headed. Some answers surprised us.\nJan 29, 2026\n##  [Introducing mcpc: A universal CLI client for MCP](https://blog.apify.com/introducing-mcpc-universal-mcp-cli-client/)\nConfigure MCP servers once and reuse them across AI coding agents. Reduce token usage with dynamic discovery and code mode, with full OAuth 2.1, persistent sessions, and proxy sandboxing built in.\nJan 28, 2026\n##  [AI-driven YouTube growth strategy with competitor and comment analysis](https://blog.apify.com/ai-driven-youtube-growth-strategy/)\nMar 10, 2026\n##  [Maven AGI x Apify: Customer support with 100% company-approved data](https://blog.apify.com/maven-agi-customer-support-case-study/)\nMar 9, 2026\n##  [How I built a two-Actor newsletter pipeline that saves me 3 hours every week](https://blog.apify.com/building-a-two-actor-newsletter-pipeline/)\nMar 4, 2026\n##  [How to assess Instagram influencer credibility with profile scraping](https://blog.apify.com/influencer-credibility-assessment/)\nMar 4, 2026\n##  [8 best email scrapers in 2026](https://blog.apify.com/best-email-scrapers/)\nMar 3, 2026\n##  [How to scrape data from Instagram: profiles, comments, reels, tags, and images](https://blog.apify.com/scrape-instagram-posts-comments-and-more-21d05506aeb3/)\nMar 3, 2026\n##  [6 best lead scraping tools in 2026](https://blog.apify.com/best-lead-scraping-tools/)\nMar 3, 2026\n##  [How to deploy OpenClaw and give it Apify skills](https://blog.apify.com/deploy-openclaw-and-give-it-apify-skills/)\nMar 2, 2026\n##  [Top 10 free proxies for web scraping (Reviewed in 2026)](https://blog.apify.com/get-proxies-free-proxy-services/)\nMar 2, 2026\nLoad more posts\nProduct\n\nDevelopers\n\nConsulting\n\nSupport\n\nCompany\n\nSocials\n\nSecurity\n\nReviews\n\nCookie settings\n© 2026 Apify",
+          "content_raw": null,
+          "content_excerpt": "Get data with ready-made web scrapers for popular websites\nPre-built web scraping tools\nBuild and run serverless programs\nConnect with apps and services\nStore results for web scrapers\nRotate scraper I",
+          "content_truncated": false,
+          "title": "Apify Blog: Guides to web scraping, automation, and AI agents",
+          "meta_description": "Get more value from the web. Learn how to build, run, and integrate Actors, scrape the web without getting blocked, and feed current web data to AI models.",
+          "content_length": 2574,
+          "content_hash": "f4a5c946bff4a618ac555bb57b8f96cb055dc02c80584d2ec5ffb97671148a2f",
+          "links_internal_count": 100,
+          "links_external_count": 14,
+          "extracted_at": "2026-03-14T01:15:52.646076+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "invalid_regex_patterns",
+        "group": "core",
+        "description": "Invalid regex patterns should fail fast with clear error",
+        "expect_error": true,
+        "input": {
+          "start_urls": [
+            "https://example.com"
+          ],
+          "extract_mode": "text",
+          "max_pages": 1,
+          "max_depth": 0,
+          "include_patterns": [
+            "("
+          ]
+        }
+      },
+      "summary": {
+        "id": "invalid_regex_patterns",
+        "description": "Invalid regex patterns should fail fast with clear error",
+        "status": "expected_error",
+        "error": "ValueError: Invalid includePatterns regex pattern(s): '('",
+        "count": 0,
+        "success": 0,
+        "avg_content_length": 0,
+        "errors": {},
+        "sample_urls": []
+      },
+      "items": []
+    },
+    {
+      "scenario": {
+        "id": "redirect_chain",
+        "group": "extended",
+        "description": "Redirects should resolve and complete cleanly",
+        "timeout_secs": 45,
+        "input": {
+          "start_urls": [
+            "https://httpbin.org/redirect/2"
+          ],
+          "extract_mode": "text",
+          "max_pages": 1,
+          "max_depth": 0,
+          "same_domain_only": true,
+          "max_retries": 0,
+          "request_timeout_secs": 20
+        }
+      },
+      "summary": {
+        "id": "redirect_chain",
+        "description": "Redirects should resolve and complete cleanly",
+        "status": "ok",
+        "error": null,
+        "count": 1,
+        "success": 1,
+        "avg_content_length": 820,
+        "errors": {
+          "none": 1
+        },
+        "sample_urls": [
+          "https://httpbin.org/redirect/2"
+        ]
+      },
+      "items": [
+        {
+          "url": "https://httpbin.org/redirect/2",
+          "success": true,
+          "status_code": 302,
+          "error_message": "",
+          "error_type": null,
+          "content": "\"Accept\": \"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\",\n\"Accept-Encoding\": \"b,compres,deflat\",\n\"Accept-Language\": \"nl-BE,*;q=0.5\",\n\"Dnt\": \"1\",\n\"Host\": \"httpbin.org\",\n\"Priority\": \"u=0, i\",\n\"Referer\": \"http://www.onelook.com/\",\n\"Sec-Ch-Ua\": \"\\\"Chromium\\\";v=\\\"145\\\", \\\"Not:A-Brand\\\";v=\\\"99\\\"\",\n\"Sec-Ch-Ua-Mobile\": \"?0\",\n\"Sec-Ch-Ua-Platform\": \"\\\"Linux\\\"\",\n\"Sec-Fetch-Dest\": \"document\",\n\"Sec-Fetch-Mode\": \"navigate\",\n\"Sec-Fetch-Site\": \"none\",\n\"Sec-Fetch-User\": \"?1\",\n\"Upgrade-Insecure-Requests\": \"1\",\n\"User-Agent\": \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/116.0.0.0 Safari/537.36\",\n\"X-Amzn-Trace-Id\": \"Root=1-69b4b6cd-46a5e4c162b9f93076be8650\"\n},\n\"origin\": \"142.249.36.114\",\n\"url\": \"https://httpbin.org/get\"\n}\n\n```",
+          "content_raw": null,
+          "content_excerpt": "\"Accept\": \"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\",\n\"Accept-Encoding\": \"b,compres,deflat\",\n\"Accept-Lang",
+          "content_truncated": false,
+          "title": null,
+          "meta_description": null,
+          "content_length": 820,
+          "content_hash": "93a54a655e9d8baf17c9bbd41fc61f8fb26e84ee4a36cc6dbae2cd267dd2c92f",
+          "links_internal_count": 0,
+          "links_external_count": 0,
+          "extracted_at": "2026-03-14T01:15:57.189511+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "redirect_chain_long",
+        "group": "hard",
+        "description": "Longer redirect chain (optional stress)",
+        "timeout_secs": 60,
+        "input": {
+          "start_urls": [
+            "https://httpbin.org/redirect/3"
+          ],
+          "extract_mode": "text",
+          "max_pages": 1,
+          "max_depth": 0,
+          "same_domain_only": true,
+          "max_retries": 0,
+          "request_timeout_secs": 25
+        }
+      },
+      "summary": {
+        "id": "redirect_chain_long",
+        "description": "Longer redirect chain (optional stress)",
+        "status": "ok",
+        "error": null,
+        "count": 1,
+        "success": 1,
+        "avg_content_length": 807,
+        "errors": {
+          "none": 1
+        },
+        "sample_urls": [
+          "https://httpbin.org/redirect/3"
+        ]
+      },
+      "items": [
+        {
+          "url": "https://httpbin.org/redirect/3",
+          "success": true,
+          "status_code": 302,
+          "error_message": "",
+          "error_type": null,
+          "content": "\"Accept\": \"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\",\n\"Accept-Encoding\": \"deflat,*\",\n\"Accept-Language\": \"ru,*;q=0.5\",\n\"Dnt\": \"1\",\n\"Host\": \"httpbin.org\",\n\"Priority\": \"u=0, i\",\n\"Referer\": \"http://nerdydata.com/\",\n\"Sec-Ch-Ua\": \"\\\"Chromium\\\";v=\\\"145\\\", \\\"Not:A-Brand\\\";v=\\\"99\\\"\",\n\"Sec-Ch-Ua-Mobile\": \"?0\",\n\"Sec-Ch-Ua-Platform\": \"\\\"Linux\\\"\",\n\"Sec-Fetch-Dest\": \"document\",\n\"Sec-Fetch-Mode\": \"navigate\",\n\"Sec-Fetch-Site\": \"none\",\n\"Sec-Fetch-User\": \"?1\",\n\"Upgrade-Insecure-Requests\": \"1\",\n\"User-Agent\": \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/116.0.0.0 Safari/537.36\",\n\"X-Amzn-Trace-Id\": \"Root=1-69b4b6d2-3f7454297aa4a31074f8b26b\"\n},\n\"origin\": \"142.249.36.114\",\n\"url\": \"https://httpbin.org/get\"\n}\n\n```",
+          "content_raw": null,
+          "content_excerpt": "\"Accept\": \"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\",\n\"Accept-Encoding\": \"deflat,*\",\n\"Accept-Language\": \"",
+          "content_truncated": false,
+          "title": null,
+          "meta_description": null,
+          "content_length": 807,
+          "content_hash": "06bddb1dbcbd93b9fd2b2bf45dee97124bc488ba33c21e0223f55aabf7f2736d",
+          "links_internal_count": 0,
+          "links_external_count": 0,
+          "extracted_at": "2026-03-14T01:16:01.446293+00:00",
+          "retry_attempt": 0,
+          "will_retry": false
+        }
+      ]
+    }
+  ],
+  "elapsed_secs": 47.7,
+  "summary_counts": {
+    "ok": 8,
+    "expected_error": 1,
+    "failed": 0,
+    "total": 9
+  }
+}

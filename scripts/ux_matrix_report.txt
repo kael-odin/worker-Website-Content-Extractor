@@ -1,0 +1,12 @@
+UX MATRIX SUMMARY
+- marketing_home: ok | 1/1 success | avg_len=2194
+- knowledge_base: ok | 1/1 success | avg_len=2031
+- simple_static: ok | 1/1 success | avg_len=118
+- mixed_start_urls: ok | 1/1 success | avg_len=118
+- developer_docs: ok | 3/3 success | avg_len=3017
+- blog: ok | 1/1 success | avg_len=2574
+- invalid_regex_patterns: expected_error | 0/0 success | avg_len=0
+- redirect_chain: ok | 1/1 success | avg_len=820
+- redirect_chain_long: ok | 1/1 success | avg_len=807
+
+Total: 8 ok, 1 expected_error, 0 failed | 47.7s

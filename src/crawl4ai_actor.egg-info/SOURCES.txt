@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+src/crawl4ai_actor/__init__.py
+src/crawl4ai_actor/config.py
+src/crawl4ai_actor/crawler.py
+src/crawl4ai_actor/main.py
+src/crawl4ai_actor.egg-info/PKG-INFO
+src/crawl4ai_actor.egg-info/SOURCES.txt
+src/crawl4ai_actor.egg-info/dependency_links.txt
+src/crawl4ai_actor.egg-info/requires.txt
+src/crawl4ai_actor.egg-info/top_level.txt
+tests/test_config.py
