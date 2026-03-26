@@ -48,7 +48,6 @@ def _row_for_push(row: dict) -> dict:
 
 
 DEFAULT_INPUT = {
-    "startUrls": [{"url": "https://example.com"}],
     "maxPages": 50,
     "maxDepth": 2,
     "concurrency": 5,
@@ -58,7 +57,6 @@ DEFAULT_INPUT = {
     "sameDomainOnly": True,
     "cleanContent": True,
     "headless": True,
-    "useProxy": False,
 }
 
 
@@ -67,11 +65,36 @@ async def run():
         raw = CafeSDK.Parameter.get_input_json_dict() or {}
         input_json_dict = {**DEFAULT_INPUT, **{k: v for k, v in raw.items() if k != "version"}}
         
-        # Handle startUrls format (Cafe stringList format)
+        # Handle startUrls format - 多种格式兼容
         start_urls = input_json_dict.get("startUrls") or []
+        
+        # 格式1: [{"url": "..."}] - 标准格式
+        # 格式2: [{"string": "..."}] - Cafe stringList格式
+        # 格式3: ["...", "..."] - 字符串数组
+        # 格式4: 单个 "url" 字段 - Cafe平台可能单独传入
+        
         if start_urls and isinstance(start_urls, list):
-            if isinstance(start_urls[0], dict) and "string" in start_urls[0]:
-                input_json_dict["startUrls"] = [{"url": s.get("string", "")} for s in start_urls if s.get("string")]
+            if isinstance(start_urls[0], dict):
+                if "string" in start_urls[0]:
+                    # 格式2: Cafe stringList
+                    start_urls = [{"url": s.get("string", "")} for s in start_urls if s.get("string")]
+                # 格式1: 已经是标准格式，保持不变
+            elif isinstance(start_urls[0], str):
+                # 格式3: 字符串数组
+                start_urls = [{"url": u} for u in start_urls]
+        
+        # 格式4: 如果startUrls为空但有单独的url字段（Cafe平台可能这样传）
+        if not start_urls and "url" in input_json_dict:
+            single_url = input_json_dict["url"]
+            if single_url and isinstance(single_url, str):
+                start_urls = [{"url": single_url}]
+                CafeSDK.Log.info(f"Using single URL from 'url' field: {single_url}")
+        
+        input_json_dict["startUrls"] = start_urls
+        
+        if not start_urls:
+            CafeSDK.Log.warn("No valid startUrls provided!")
+            return
         
         CafeSDK.Log.debug(f"params: {input_json_dict}")
         

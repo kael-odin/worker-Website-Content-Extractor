@@ -52,14 +52,6 @@
       "default": true
     },
     {
-      "title": "Use Proxy | 使用代理",
-      "name": "useProxy",
-      "type": "boolean",
-      "editor": "switch",
-      "description": "Use platform proxy when PROXY_AUTH is set. | 当 PROXY_AUTH 设置时使用平台代理。",
-      "default": false
-    },
-    {
       "title": "Extract Mode | 提取模式",
       "name": "extractMode",
       "type": "string",
@@ -162,16 +154,18 @@
       "name": "waitForSelector",
       "type": "string",
       "editor": "input",
-      "description": "CSS selector to wait for before extraction (e.g. .article-body). | 提取前等待的 CSS 选择器（如 .article-body）。",
-      "default": ""
+      "description": "CSS selector to wait for before extraction (e.g. .article-body). Leave empty to skip. | 提取前等待的 CSS 选择器（如 .article-body），留空表示不等待。",
+      "default": "",
+      "placeholder": "e.g. .content, #main, article"
     },
     {
       "title": "CSS Selector (Extract Region) | CSS选择器(提取区域)",
       "name": "cssSelector",
       "type": "string",
       "editor": "input",
-      "description": "Extract only content inside this CSS selector (e.g. main, .content). | 仅提取此 CSS 选择器内的内容（如 main, .content）。",
-      "default": ""
+      "description": "Extract only content inside this CSS selector (e.g. main, .content). Leave empty for full page. | 仅提取此 CSS 选择器内的内容（如 main, .content），留空表示提取整页。",
+      "default": "",
+      "placeholder": "e.g. article, .post-content, main"
     },
     {
       "title": "Crawl Mode | 抓取模式",

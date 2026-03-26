@@ -24,7 +24,7 @@ from crawl4ai.content_scraping_strategy import ContentScrapingStrategy
 
 def normalize_input(raw: Dict[str, Any]) -> Dict[str, Any]:
     """Normalize and validate input parameters."""
-    # Start URLs
+    # Start URLs - 多种格式兼容
     start_urls = raw.get("startUrls") or []
     if isinstance(start_urls, str):
         start_urls = [{"url": start_urls}]
@@ -32,6 +32,12 @@ def normalize_input(raw: Dict[str, Any]) -> Dict[str, Any]:
         if isinstance(start_urls[0], str):
             start_urls = [{"url": u} for u in start_urls]
     start_urls = [u.get("url", "") for u in start_urls if u.get("url")]
+    
+    # 兼容单独的 url 字段（Cafe平台可能这样传）
+    if not start_urls and "url" in raw:
+        single_url = raw["url"]
+        if single_url and isinstance(single_url, str):
+            start_urls = [single_url]
     
     # Max pages - 使用 None 作为哨兵值，正确处理0
     max_pages = raw.get("maxPages")
