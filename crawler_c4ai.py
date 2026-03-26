@@ -154,11 +154,21 @@ async def run_crawler(
     start_domains: Set[str] = {get_domain(u) for u in params["start_urls"]}
     pages_count = 0
     
-    # Browser config
-    browser_config = BrowserConfig(
-        headless=params["headless"],
-        verbose=False,
-    )
+    # Browser config - 支持 CDP 连接
+    if browser_cdp_url:
+        log.info(f"Connecting to CDP browser: {browser_cdp_url[:30]}...")
+        browser_config = BrowserConfig(
+            cdp_url=browser_cdp_url,
+            use_managed_browser=False,  # 使用外部 CDP 浏览器
+            headless=params["headless"],
+            verbose=False,
+        )
+    else:
+        log.info("Using local browser")
+        browser_config = BrowserConfig(
+            headless=params["headless"],
+            verbose=False,
+        )
     
     # Crawler config
     crawler_config = CrawlerRunConfig(

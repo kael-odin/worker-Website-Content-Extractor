@@ -23,7 +23,7 @@ HEADER_KEYS = [h["key"] for h in RESULT_TABLE_HEADERS]
 
 
 class _CafeLogAdapter:
-    def debug(self, msg: str):
+    def debug(self, msg: str, exc_info: bool = False):
         CafeSDK.Log.debug(msg)
 
     def info(self, msg: str):
@@ -32,8 +32,15 @@ class _CafeLogAdapter:
     def warn(self, msg: str):
         CafeSDK.Log.warn(msg)
 
+    def warning(self, msg: str):
+        CafeSDK.Log.warn(msg)
+
     def error(self, msg: str):
         CafeSDK.Log.error(msg)
+
+    def exception(self, msg: str):
+        import traceback
+        CafeSDK.Log.error(f"{msg}\n{traceback.format_exc()}")
 
 
 def _row_for_push(row: dict) -> dict:
@@ -60,7 +67,7 @@ async def run():
         raw = CafeSDK.Parameter.get_input_json_dict() or {}
         input_json_dict = {**DEFAULT_INPUT, **{k: v for k, v in raw.items() if k != "version"}}
         
-        # Handle startUrls format
+        # Handle startUrls format (Cafe stringList format)
         start_urls = input_json_dict.get("startUrls") or []
         if start_urls and isinstance(start_urls, list):
             if isinstance(start_urls[0], dict) and "string" in start_urls[0]:
@@ -68,12 +75,16 @@ async def run():
         
         CafeSDK.Log.debug(f"params: {input_json_dict}")
         
-        # Check for platform proxy
+        # Check for platform CDP browser
         auth = os.environ.get("PROXY_AUTH")
+        is_cafe_env = bool(auth)
         browser_cdp_url = f"ws://{auth}@chrome-ws-inner.cafescraper.com" if auth else None
+        
         if browser_cdp_url:
-            CafeSDK.Log.info("Using CafeScraper fingerprint browser (CDP)")
+            CafeSDK.Log.info("CafeScraper cloud environment detected")
+            CafeSDK.Log.info("Connecting to fingerprint browser (CDP)")
         else:
+            CafeSDK.Log.info("Local development mode")
             CafeSDK.Log.info("Using local browser")
         
         CafeSDK.Result.set_table_header(RESULT_TABLE_HEADERS)
@@ -87,9 +98,11 @@ async def run():
             log=_CafeLogAdapter(),
             push_data=push_data,
         )
-        CafeSDK.Log.info("Run completed")
+        CafeSDK.Log.info("Run completed successfully")
     except Exception as e:
-        CafeSDK.Log.error(f"Run error: {e}")
+        import traceback
+        CafeSDK.Log.error(f"Run failed: {e}")
+        CafeSDK.Log.error(traceback.format_exc())
         CafeSDK.Result.push_data({"error": str(e), "error_code": "500", "status": "failed"})
         raise
 
