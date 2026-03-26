@@ -33,20 +33,36 @@ def normalize_input(raw: Dict[str, Any]) -> Dict[str, Any]:
             start_urls = [{"url": u} for u in start_urls]
     start_urls = [u.get("url", "") for u in start_urls if u.get("url")]
     
-    # Max pages
-    max_pages = int(raw.get("maxPages", 50) or 50)
+    # Max pages - 使用 None 作为哨兵值，正确处理0
+    max_pages = raw.get("maxPages")
+    if max_pages is None:
+        max_pages = 50
+    else:
+        max_pages = int(max_pages)
     max_pages = max(1, min(max_pages, 10000))
     
     # Max depth
-    max_depth = int(raw.get("maxDepth", 2) or 2)
+    max_depth = raw.get("maxDepth")
+    if max_depth is None:
+        max_depth = 2
+    else:
+        max_depth = int(max_depth)
     max_depth = max(0, min(max_depth, 10))
     
     # Concurrency
-    concurrency = int(raw.get("concurrency", 5) or 5)
+    concurrency = raw.get("concurrency")
+    if concurrency is None:
+        concurrency = 5
+    else:
+        concurrency = int(concurrency)
     concurrency = max(1, min(concurrency, 50))
     
     # Timeout
-    timeout = int(raw.get("requestTimeoutSecs", 60) or 60)
+    timeout = raw.get("requestTimeoutSecs")
+    if timeout is None:
+        timeout = 60
+    else:
+        timeout = int(timeout)
     timeout = max(5, min(timeout, 600))
     
     # Extract mode
@@ -227,13 +243,15 @@ async def run_crawler(
                     log.info(f"Skip: domain {url_domain} not in start_domains")
                     continue
                 
-                # Check patterns
-                if not matches_patterns(url, params["include_patterns"], default=True):
-                    log.info(f"Skip: doesn't match include_patterns")
-                    continue
-                if matches_patterns(url, params["exclude_patterns"], default=False):
-                    log.info(f"Skip: matches exclude_patterns")
-                    continue
+                # Check patterns - 起始URL(depth=0)不应用include/exclude模式
+                # 只对发现的链接应用模式过滤
+                if depth > 0:
+                    if not matches_patterns(url, params["include_patterns"], default=True):
+                        log.info(f"Skip: doesn't match include_patterns")
+                        continue
+                    if matches_patterns(url, params["exclude_patterns"], default=False):
+                        log.info(f"Skip: matches exclude_patterns")
+                        continue
                 
                 visited.add(url)
                 log.info(f"Crawling: {url} (depth={depth})")
@@ -267,12 +285,21 @@ async def run_crawler(
                             content = result.cleaned_html or result.html or ""
                             output["html"] = content
                         else:  # text
-                            content = result.extracted_content or ""
+                            # 优先使用 extracted_content，fallback 到 markdown 的纯文本
+                            content = result.extracted_content or (result.markdown or "").replace("#", "").replace("*", "").replace("`", "")
                             output["text"] = content
                         
-                        # Truncate if needed
+                        # Truncate if needed - 截断并更新到output
                         if params["max_chars"] > 0 and len(content) > params["max_chars"]:
-                            content = content[:params["max_chars"]]
+                            truncated_content = content[:params["max_chars"]]
+                            # 更新对应的输出字段
+                            if params["extract_mode"] == "markdown":
+                                output["markdown"] = truncated_content
+                            elif params["extract_mode"] == "html":
+                                output["html"] = truncated_content
+                            else:
+                                output["text"] = truncated_content
+                            content = truncated_content
                         
                         # Excerpt
                         if params["excerpt_chars"] > 0 and content:

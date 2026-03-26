@@ -234,6 +234,51 @@ python main.py
 
 MIT License © 2024 kael-odin
 
+---
+
+## ✅ Test Report | 测试报告
+
+**Last Updated: 2026-03-26**
+
+| Metric | Value |
+|--------|-------|
+| Total Tests | 41 |
+| Passed | 41 |
+| Failed | 0 |
+| Success Rate | **100%** |
+| Duration | 239.51s |
+
+### Test Coverage | 测试覆盖
+
+| Category | Tests | Status |
+|----------|-------|--------|
+| Unit Tests (matches_patterns) | 7 | ✅ All Pass |
+| Unit Tests (normalize_input) | 12 | ✅ All Pass |
+| Integration Tests (Single URL) | 1 | ✅ Pass |
+| Integration Tests (Extract Modes) | 3 | ✅ All Pass |
+| Integration Tests (Depth Crawling) | 1 | ✅ Pass |
+| Integration Tests (Pattern Filtering) | 2 | ✅ All Pass |
+| Integration Tests (Same Domain) | 1 | ✅ Pass |
+| Integration Tests (Content Options) | 3 | ✅ All Pass |
+| Integration Tests (Crawl Modes) | 2 | ✅ All Pass |
+| Integration Tests (Error Handling) | 2 | ✅ All Pass |
+| Integration Tests (Wait Conditions) | 2 | ✅ All Pass |
+| Integration Tests (CSS Selector) | 1 | ✅ Pass |
+| Boundary Tests | 3 | ✅ All Pass |
+| Stress Tests | 1 | ✅ Pass |
+
+### Run Tests | 运行测试
+
+```bash
+# Run comprehensive test suite
+python comprehensive_test.py
+
+# Run CDP connection test
+python test_cdp_connection.py
+```
+
+---
+
 ## 🔗 Links
 
 - [GitHub Repository](https://github.com/kael-odin/worker-website-content-extractor)

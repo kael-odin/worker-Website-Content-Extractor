@@ -1,0 +1,255 @@
+{
+  "timestamp": "2026-03-26 10:03:09",
+  "total_time_sec": 239.51,
+  "passed": 41,
+  "failed": 0,
+  "success_rate": "100.0%",
+  "tests": [
+    {
+      "name": "matches_patterns: 空include模式应返回True",
+      "success": true,
+      "details": "got True",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "matches_patterns: 空exclude模式应返回False",
+      "success": true,
+      "details": "got False",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "matches_patterns: 单个匹配模式",
+      "success": true,
+      "details": "got True",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "matches_patterns: 无匹配模式",
+      "success": true,
+      "details": "got False",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "matches_patterns: 匹配多个模式之一",
+      "success": true,
+      "details": "got True",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "matches_patterns: 无效正则跳过",
+      "success": true,
+      "details": "got False",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "matches_patterns: 复杂正则模式",
+      "success": true,
+      "details": "got True",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: 默认值填充",
+      "success": true,
+      "details": "{'start_urls': ['https://example.com'], 'max_pages': 50, 'max_depth': 2, 'concurrency': 5, 'timeout': 60, 'extract_mode': 'markdown', 'wait_until': 'domcontentloaded', 'same_domain': True, 'clean_content': True, 'include_raw': False, 'max_chars': 0, 'excerpt_chars': 300, 'max_retries': 2, 'headless': True, 'use_proxy': False, 'include_patterns': [], 'exclude_patterns': [], 'wait_for_selector': '', 'css_selector': '', 'crawl_mode': 'full', 'include_links': False}",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: max_pages上限约束",
+      "success": true,
+      "details": "got 10000",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: max_pages负数约束",
+      "success": true,
+      "details": "got 1",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: max_pages=0约束",
+      "success": true,
+      "details": "got 1",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: max_depth上限约束",
+      "success": true,
+      "details": "got 10",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: max_depth下限约束",
+      "success": true,
+      "details": "got 0",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: startUrls字符串列表转换",
+      "success": true,
+      "details": "got ['https://a.com', 'https://b.com']",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: startUrls单字符串转换",
+      "success": true,
+      "details": "got ['https://example.com']",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: extract_mode无效值处理",
+      "success": true,
+      "details": "got markdown",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: waitUntil无效值处理",
+      "success": true,
+      "details": "got domcontentloaded",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: 空startUrls处理",
+      "success": true,
+      "details": "got []",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "normalize_input: patterns字符串转列表",
+      "success": true,
+      "details": "include=['/blog/'], exclude=['/admin/']",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "单URL抓取: example.com",
+      "success": true,
+      "details": "抓取到1条结果",
+      "duration_sec": 6.96
+    },
+    {
+      "name": "提取模式: markdown",
+      "success": true,
+      "details": "markdown内容长度: 166",
+      "duration_sec": 8.32
+    },
+    {
+      "name": "提取模式: html",
+      "success": true,
+      "details": "html内容长度: 283",
+      "duration_sec": 5.71
+    },
+    {
+      "name": "提取模式: text",
+      "success": true,
+      "details": "text内容长度: 165",
+      "duration_sec": 20.68
+    },
+    {
+      "name": "深度爬取: maxDepth=2",
+      "success": true,
+      "details": "抓取10页, 最大深度1",
+      "duration_sec": 30.96
+    },
+    {
+      "name": "模式过滤: includePatterns",
+      "success": true,
+      "details": "包含起始URL: True, depth>0都匹配模式: True, 共10条",
+      "duration_sec": 35.48
+    },
+    {
+      "name": "模式过滤: excludePatterns",
+      "success": true,
+      "details": "depth>0都不匹配exclude模式: True, 共2条",
+      "duration_sec": 9.33
+    },
+    {
+      "name": "同域名限制: sameDomainOnly=True",
+      "success": true,
+      "details": "发现域名: {'example.com'}",
+      "duration_sec": 5.96
+    },
+    {
+      "name": "内容截断: maxContentChars=100",
+      "success": true,
+      "details": "内容长度: 100",
+      "duration_sec": 7.15
+    },
+    {
+      "name": "内容摘要: contentExcerptChars=50",
+      "success": true,
+      "details": "摘要长度: 50",
+      "duration_sec": 6.16
+    },
+    {
+      "name": "原始内容: includeRawContent=True",
+      "success": true,
+      "details": "包含rawContent: True",
+      "duration_sec": 7.81
+    },
+    {
+      "name": "抓取模式: discover_only",
+      "success": true,
+      "details": "无markdown内容: True, 包含链接: True",
+      "duration_sec": 5.68
+    },
+    {
+      "name": "抓取模式: full + includeLinkUrls",
+      "success": true,
+      "details": "包含链接: True, 包含内容: True",
+      "duration_sec": 22.0
+    },
+    {
+      "name": "错误处理: 无效URL",
+      "success": true,
+      "details": "优雅处理无效URL, 日志条数: 9",
+      "duration_sec": 2.92
+    },
+    {
+      "name": "错误处理: 空startUrls",
+      "success": true,
+      "details": "空URL处理正常, 结果数: 0",
+      "duration_sec": 0.0
+    },
+    {
+      "name": "等待条件: domcontentloaded",
+      "success": true,
+      "details": "waitUntil=domcontentloaded, 结果数: 1",
+      "duration_sec": 5.63
+    },
+    {
+      "name": "等待条件: load",
+      "success": true,
+      "details": "waitUntil=load, 结果数: 1",
+      "duration_sec": 20.43
+    },
+    {
+      "name": "CSS选择器: cssSelector=body",
+      "success": true,
+      "details": "CSS选择器提取, 内容长度: 166",
+      "duration_sec": 5.43
+    },
+    {
+      "name": "边界条件: maxPages=1",
+      "success": true,
+      "details": "maxPages=1时结果数: 1",
+      "duration_sec": 7.97
+    },
+    {
+      "name": "边界条件: maxDepth=0",
+      "success": true,
+      "details": "maxDepth=0时结果数: 1, 深度全为0: True",
+      "duration_sec": 5.63
+    },
+    {
+      "name": "边界条件: requestTimeoutSecs=5",
+      "success": true,
+      "details": "超短超时处理正常",
+      "duration_sec": 6.86
+    },
+    {
+      "name": "压力测试: 多URL并发",
+      "success": true,
+      "details": "多URL处理: 输入3, 输出3",
+      "duration_sec": 12.45
+    }
+  ]
+}
