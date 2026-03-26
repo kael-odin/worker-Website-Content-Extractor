@@ -102,10 +102,16 @@ def normalize_input(raw: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def matches_patterns(url: str, patterns: List[str]) -> bool:
-    """Check if URL matches any of the regex patterns."""
+def matches_patterns(url: str, patterns: List[str], default: bool = True) -> bool:
+    """Check if URL matches any of the regex patterns.
+    
+    Args:
+        url: URL to check
+        patterns: List of regex patterns
+        default: Return value when patterns is empty (True for include, False for exclude)
+    """
     if not patterns:
-        return True
+        return default
     for pattern in patterns:
         try:
             if re.search(pattern, url):
@@ -153,6 +159,7 @@ async def run_crawler(
     visited: Set[str] = set()
     start_domains: Set[str] = {get_domain(u) for u in params["start_urls"]}
     pages_count = 0
+    log.info(f"Start domains: {start_domains}")
     
     # Browser config - 支持 CDP 连接
     if browser_cdp_url:
@@ -188,99 +195,114 @@ async def run_crawler(
     
     # Queue for BFS crawling
     queue: List[tuple] = [(url, 0) for url in params["start_urls"]]
+    log.info(f"Queue initialized with {len(queue)} URLs")
     
-    async with AsyncWebCrawler(config=browser_config) as crawler:
-        while queue and pages_count < params["max_pages"]:
-            url, depth = queue.pop(0)
-            
-            if url in visited:
-                continue
-            if depth > params["max_depth"]:
-                continue
-            
-            # Check domain
-            if params["same_domain"] and get_domain(url) not in start_domains:
-                continue
-            
-            # Check patterns
-            if not matches_patterns(url, params["include_patterns"]):
-                continue
-            if matches_patterns(url, params["exclude_patterns"]):
-                continue
-            
-            visited.add(url)
-            log.info(f"Crawling: {url} (depth={depth})")
-            
-            try:
-                result = await crawler.arun(
-                    url=url,
-                    config=crawler_config,
-                )
+    try:
+        async with AsyncWebCrawler(config=browser_config) as crawler:
+            log.info("Crawler initialized, starting crawl loop...")
+            iteration = 0
+            while queue and pages_count < params["max_pages"]:
+                iteration += 1
+                url, depth = queue.pop(0)
+                log.info(f"Loop iteration {iteration}: url={url}, depth={depth}")
                 
-                if not result.success:
-                    log.warn(f"Failed to crawl {url}: {result.error_message}")
+                if url in visited:
+                    log.info(f"Skip: already visited")
+                    continue
+                if depth > params["max_depth"]:
+                    log.info(f"Skip: depth {depth} > max_depth {params['max_depth']}")
                     continue
                 
-                pages_count += 1
+                # Check domain
+                url_domain = get_domain(url)
+                if params["same_domain"] and url_domain not in start_domains:
+                    log.info(f"Skip: domain {url_domain} not in start_domains")
+                    continue
                 
-                # Build output
-                output = {
-                    "url": url,
-                    "title": result.metadata.get("title", "") if result.metadata else "",
-                    "depth": depth,
-                    "statusCode": result.status_code or 200,
-                }
+                # Check patterns
+                if not matches_patterns(url, params["include_patterns"], default=True):
+                    log.info(f"Skip: doesn't match include_patterns")
+                    continue
+                if matches_patterns(url, params["exclude_patterns"], default=False):
+                    log.info(f"Skip: matches exclude_patterns")
+                    continue
                 
-                # Content based on mode
-                if params["crawl_mode"] == "full":
-                    if params["extract_mode"] == "markdown":
-                        content = result.markdown or ""
-                        output["markdown"] = content
-                    elif params["extract_mode"] == "html":
-                        content = result.cleaned_html or result.html or ""
-                        output["html"] = content
-                    else:  # text
-                        content = result.extracted_content or ""
-                        output["text"] = content
+                visited.add(url)
+                log.info(f"Crawling: {url} (depth={depth})")
+                
+                try:
+                    result = await crawler.arun(
+                        url=url,
+                        config=crawler_config,
+                    )
                     
-                    # Truncate if needed
-                    if params["max_chars"] > 0 and len(content) > params["max_chars"]:
-                        content = content[:params["max_chars"]]
+                    if not result.success:
+                        log.warn(f"Failed to crawl {url}: {result.error_message}")
+                        continue
                     
-                    # Excerpt
-                    if params["excerpt_chars"] > 0 and content:
-                        output["excerpt"] = content[:params["excerpt_chars"]]
+                    pages_count += 1
                     
-                    # Include raw content
-                    if params["include_raw"]:
-                        output["rawContent"] = result.html or ""
+                    # Build output
+                    output = {
+                        "url": url,
+                        "title": result.metadata.get("title", "") if result.metadata else "",
+                        "depth": depth,
+                        "statusCode": result.status_code or 200,
+                    }
                     
-                    # Include links
-                    if params["include_links"]:
+                    # Content based on mode
+                    if params["crawl_mode"] == "full":
+                        if params["extract_mode"] == "markdown":
+                            content = result.markdown or ""
+                            output["markdown"] = content
+                        elif params["extract_mode"] == "html":
+                            content = result.cleaned_html or result.html or ""
+                            output["html"] = content
+                        else:  # text
+                            content = result.extracted_content or ""
+                            output["text"] = content
+                        
+                        # Truncate if needed
+                        if params["max_chars"] > 0 and len(content) > params["max_chars"]:
+                            content = content[:params["max_chars"]]
+                        
+                        # Excerpt
+                        if params["excerpt_chars"] > 0 and content:
+                            output["excerpt"] = content[:params["excerpt_chars"]]
+                        
+                        # Include raw content
+                        if params["include_raw"]:
+                            output["rawContent"] = result.html or ""
+                        
+                        # Include links
+                        if params["include_links"]:
+                            output["links_internal"] = result.links.get("internal", []) if result.links else []
+                            output["links_external"] = result.links.get("external", []) if result.links else []
+                    
+                    else:  # discover_only mode
                         output["links_internal"] = result.links.get("internal", []) if result.links else []
                         output["links_external"] = result.links.get("external", []) if result.links else []
-                
-                else:  # discover_only mode
-                    output["links_internal"] = result.links.get("internal", []) if result.links else []
-                    output["links_external"] = result.links.get("external", []) if result.links else []
-                
-                # Push result
-                push_data(output)
-                log.info(f"Processed: {url}")
-                
-                # Discover new links
-                if depth < params["max_depth"] and result.links:
-                    for link_type in ["internal", "external"]:
-                        if link_type == "external" and params["same_domain"]:
-                            continue
-                        for link in result.links.get(link_type, []):
-                            href = link.get("href", "") if isinstance(link, dict) else link
-                            if href and href not in visited:
-                                if href.startswith("http"):
-                                    queue.append((href, depth + 1))
-                
-            except Exception as e:
-                log.error(f"Error crawling {url}: {e}")
-                continue
+                    
+                    # Push result
+                    push_data(output)
+                    log.info(f"Processed: {url}")
+                    
+                    # Discover new links
+                    if depth < params["max_depth"] and result.links:
+                        for link_type in ["internal", "external"]:
+                            if link_type == "external" and params["same_domain"]:
+                                continue
+                            for link in result.links.get(link_type, []):
+                                href = link.get("href", "") if isinstance(link, dict) else link
+                                if href and href not in visited:
+                                    if href.startswith("http"):
+                                        queue.append((href, depth + 1))
+                    
+                except Exception as e:
+                    log.error(f"Error crawling {url}: {e}")
+                    continue
+    except Exception as e:
+        log.error(f"Failed to initialize crawler: {e}")
+        raise
     
     log.info(f"Crawl completed. Processed {pages_count} pages.")
