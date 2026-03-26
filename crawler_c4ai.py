@@ -4,8 +4,16 @@
 Website Content Extractor using Crawl4AI.
 Crawls URLs and extracts page content in multiple formats.
 """
-import asyncio
 import os
+import sys
+import io
+
+# Fix Windows GBK encoding for rich/crawl4ai output
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+import asyncio
 import re
 from typing import Any, Callable, Dict, List, Optional, Set
 from urllib.parse import urljoin, urlparse
